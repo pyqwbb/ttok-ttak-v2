@@ -25,7 +25,7 @@
 
 <script setup>
 import { onMounted, computed } from 'vue';
-import { useUserStore } from '@/stores/user';
+import { useUserStore } from '@/stores/userStore';
 import { useRouter } from 'vue-router';
 
 import profileIcon from '@/assets/icons/profile.svg';

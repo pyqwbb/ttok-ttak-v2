@@ -1,5 +1,5 @@
 <script setup>
-import Sidebar from './components/common/sidebar.vue';
+import Sidebar from './components/layout/SideBar.vue';
 import { RouterView } from 'vue-router';
 </script>
 

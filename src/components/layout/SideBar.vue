@@ -55,21 +55,19 @@ import logo from '@/assets/icons/logo-signiture.svg';
 import profileIcon from '@/assets/icons/profile.svg';
 import placeholder from '@/assets/icons/placeholder.svg';
 import coinIcon from '@/assets/icons/money.svg';
-import { ref, computed, onMounted } from 'vue';
-import { useCategoryStore } from '@/stores/category';
-import { useTemplateStore } from '@/stores/template';
-import { useUserStore } from '@/stores/user';
+import { computed, onMounted } from 'vue';
+import { useCategoryStore } from '@/stores/categoryStore';
+import { useUserStore } from '@/stores/userStore';
 
 const userStore = useUserStore();
 const categoryStore = useCategoryStore();
-const templateStore = useTemplateStore();
 
 const userName = computed(() => userStore.user?.nickname || '');
 const uid = localStorage.getItem('userId') || '1';
 
 const navItems = [
-  { name: '대시보드', icon: '📊', path: '/' },
-  { name: '거래내역', icon: '📝', path: '/TransactionList' },
+  { name: '대시보드', icon: '📊', path: '/dashboard' },
+  { name: '거래내역', icon: '📝', path: '/transactions' },
   { name: '프로필', icon: '👤', path: '/profile' },
 ];
 
@@ -123,6 +121,10 @@ onMounted(async () => {
   padding: 0 24px;
 }
 
+.sidebar-logo img {
+  width: 60%;
+}
+
 /* 프로필 */
 .user-profile {
   display: flex;
@@ -138,7 +140,7 @@ onMounted(async () => {
 }
 
 .user-profile img {
-  width: 50px;
+  width: 40px;
 }
 
 /* 뱃지 영역만 가운데 */

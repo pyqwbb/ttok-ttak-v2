@@ -131,7 +131,7 @@
 
 <script setup>
 import { onMounted, onUnmounted, ref, watch, nextTick } from 'vue';
-import { useCategoryStore } from '@/stores/category';
+import { useCategoryStore } from '@/stores/categoryStore';
 
 const store = useCategoryStore();
 const bubbleWrapRef = ref(null);
