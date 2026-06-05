@@ -261,35 +261,30 @@
       "uid": 1,
       "isRecurring": true,
       "cycle": "monthly"
-    }
-  ],
-  "TEMPLATE": [
-    {
-      "id": "1",
-      "uid": 1,
-      "cid": 2,
-      "amount": 4500,
-      "type": "expense",
-      "detail": "스타벅스 아메리카노",
-      "memo": "출근길 고정 지출"
     },
     {
-      "id": "2",
-      "uid": 1,
-      "cid": 1,
-      "amount": 8000,
+      "id": "15",
+      "date": "2026-06-07",
       "type": "expense",
-      "detail": "식권 구매",
-      "memo": "회사 근처 식당"
-    },
-    {
-      "id": "3",
-      "uid": 1,
+      "amount": 1200,
       "cid": 5,
-      "amount": 1500,
+      "detail": "편의점 삼각김밥",
+      "memo": "간단 아침",
+      "uid": 1,
+      "isRecurring": false,
+      "cycle": null
+    },
+    {
+      "id": "16",
+      "date": "2026-07-07",
       "type": "expense",
-      "detail": "지하철 편도",
-      "memo": "기본 요금"
+      "amount": 1200,
+      "cid": 1,
+      "detail": "편의점 삼각김밥",
+      "memo": "간단 아침",
+      "uid": 1,
+      "isRecurring": false,
+      "cycle": null
     }
   ],
   "reactionCount": [
