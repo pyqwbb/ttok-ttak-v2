@@ -1,0 +1,121 @@
+/* bubble-chart.css */
+
+.bubble-wrap {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  max-width: 40%;
+}
+
+/* 툴팁 */
+.bubble-tooltip {
+  position: absolute;
+  z-index: 10;
+  background: white;
+  border: 0.5px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  pointer-events: none;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  animation: tooltipFadeIn 0.15s ease;
+}
+
+@keyframes tooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tooltip-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+  margin-top: 2px;
+}
+
+.tooltip-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.tooltip-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 0;
+  color: #222;
+}
+
+.tooltip-amount {
+  font-size: 0.85rem;
+  margin: 0;
+  color: #222;
+}
+
+.tooltip-count {
+  font-size: 0.8rem;
+  margin: 0;
+  color: #888;
+}
+
+.tooltip-ratio {
+  font-size: 0.8rem;
+  margin: 0;
+  color: #888;
+}
+
+/* 버블 그룹 */
+.bubble-group {
+  cursor: pointer;
+}
+
+.bubble-group:hover .bubble-circle {
+  filter: brightness(1.1);
+  stroke-width: 2;
+}
+
+/* 버블 등장 애니메이션 */
+@keyframes bubblePop {
+  0% {
+    r: 0;
+    opacity: 0;
+  }
+  70% {
+    r: calc(var(--target-r) * 1.1);
+    opacity: 1;
+  }
+  100% {
+    r: var(--target-r);
+    opacity: 1;
+  }
+}
+
+.bubble-circle {
+  animation: bubblePop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  transition:
+    filter 0.15s ease,
+    stroke-width 0.15s ease;
+}
+
+/* 텍스트 등장 애니메이션 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.bubble-label {
+  opacity: 0;
+  animation: fadeIn 0.3s ease forwards;
+}

@@ -1,0 +1,60 @@
+.chart-page {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.loading {
+  text-align: center;
+  color: #aaadad;
+  padding: 3rem;
+  font-size: 16px;
+}
+
+.subtitle {
+  font-size: 0.85rem;
+  color: #959999;
+  margin: 0 0 0.3rem;
+}
+
+.title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin: 0 0 2rem;
+  color: #2c3333;
+}
+
+.content {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  justify-content: center;
+  margin: 2rem;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem;
+}
+
+.empty-icon {
+  font-size: 2rem;
+  margin: 0 0 0.5rem;
+}
+
+.empty-text {
+  color: #aaadad;
+  margin: 0;
+  font-size: 16px;
+}
+
+@media (max-width: 900px) {
+  .content {
+    flex-direction: column;
+    align-items: center;
+  }
+}

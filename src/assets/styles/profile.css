@@ -1,0 +1,179 @@
+/* Profile Styles */
+.profile-page {
+  width: 100%;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  height: 100%;
+}
+
+.profile-card {
+  background: white;
+  border-radius: 12px;
+  padding: 32px;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0px 2px 8px rgba(44, 51, 51, 0.08);
+}
+
+.profile-avatar {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.profile-avatar img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+}
+
+.profile-heading {
+  text-align: center;
+  margin: 0 0 24px;
+  font-size: 24px;
+  font-weight: 700;
+  color: #2c3333;
+}
+
+.info-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.info-label {
+  font-weight: 600;
+  color: #565c5c;
+  font-size: 14px;
+}
+
+.info-value {
+  font-size: 16px;
+  color: #2c3333;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.radio-group {
+  display: flex;
+  gap: 16px;
+}
+
+.radio-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.radio-item input[type='radio'] {
+  cursor: pointer;
+}
+
+.btn-group {
+  display: flex;
+  gap: 12px;
+}
+
+.btn-group .btn-cancel,
+.btn-group .btn-primary {
+  flex: 1;
+}
+
+.mode-section.inactive {
+  max-height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.mode-section.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Form and input styles */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field label {
+  font-size: 14px;
+  color: #565c5c;
+  font-weight: 600;
+}
+
+.field input[type='text'],
+.field input[type='email'],
+.field select {
+  padding: 8px 10px;
+  border: 1px solid #e6e6e6;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition:
+    box-shadow 180ms ease,
+    border-color 180ms ease;
+}
+
+.field input:focus,
+.field select:focus {
+  border-color: #bcdff6;
+  box-shadow: 0 0 0 4px rgba(188, 223, 246, 0.35);
+}
+
+.error {
+  color: #d9534f;
+  font-size: 13px;
+  margin: 4px 0 0;
+}
+
+/* Buttons */
+.btn-primary {
+  background-color: #67ea76;
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+  transition:
+    transform 140ms ease,
+    box-shadow 120ms ease,
+    opacity 120ms ease;
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.btn-cancel {
+  background: #f5f7f8;
+  border: 1px solid #e6e9ea;
+  padding: 10px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}

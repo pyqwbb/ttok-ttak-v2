@@ -1,0 +1,46 @@
+/* Transaction Modal Styles */
+.type-toggle {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.type-btn {
+  flex: 1;
+  padding: 12px;
+  border: 2px solid #d5d6d6;
+  border-radius: 6px;
+  background: white;
+  color: #565c5c;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.type-btn.active {
+  border-color: #67ea76;
+  background-color: #f0fdf1;
+  color: #2c3333;
+}
+
+.btn-submit {
+  padding: 12px 16px;
+  background-color: #67ea76;
+  color: #1a1a1a;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  flex: 1;
+}
+
+.btn-submit:hover:not(:disabled) {
+  background-color: #4dd060;
+}
+
+.btn-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
