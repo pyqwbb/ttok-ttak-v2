@@ -8,22 +8,34 @@ import ProfileView from '@/components/views/ProfileView';
 export const router = createBrowserRouter([
   {
     path: '/',
+    element: <OnboardingView />,
+  },
+  {
+    path: 'dashboard',
     element: <Sidebar />,
     children: [
       {
         index: true,
-        element: <OnboardingView />,
-      },
-      {
-        path: 'dashboard',
         element: <DashboardView />,
       },
+    ],
+  },
+  {
+    path: 'transactions',
+    element: <Sidebar />,
+    children: [
       {
-        path: 'transactions',
+        index: true,
         element: <TransactionView />,
       },
+    ],
+  },
+  {
+    path: 'profile',
+    element: <Sidebar />,
+    children: [
       {
-        path: 'profile',
+        index: true,
         element: <ProfileView />,
       },
     ],

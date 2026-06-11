@@ -160,6 +160,15 @@
   color: var(--color-deepgray-60);
 }
 
+html,
+body {
+  height: 100%;
+}
+
+#app {
+  height: 100%;
+}
+
 * {
   margin: 0; /* 브라우저가 기본적으로 제공하는 바깥 여백(margin)을 0으로 초기화 */
   padding: 0; /* 브라우저가 기본적으로 제공하는 안쪽 여백(padding)을 0으로 초기화 */
