@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useUserStore } from '@/stores/userStore';
 import profileIcon from '@/assets/icons/profile.svg';
 import '@/assets/styles/profile.css';
@@ -11,6 +12,8 @@ const genderOptions = [
 ];
 
 export default function ProfileView() {
+  const navigate = useNavigate();
+
   const userStore = useUserStore();
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -26,6 +29,13 @@ export default function ProfileView() {
   const userInfo = userStore.user || {};
   const genderLabel =
     genderOptions.find((g) => g.value === userInfo.gender)?.label || '미선택';
+
+  const handleLogout = () => {
+    // 필요 시 사용자 정보 초기화
+    // userStore.logout?.();
+    localStorage.removeItem('userId');
+    navigate('/');
+  };
 
   const startEdit = () => {
     setIsEditing(true);
@@ -190,6 +200,14 @@ export default function ProfileView() {
             </button>
           </div>
         </div>
+
+        {!isEditing && (
+          <div className="logout-wrapper">
+            <button className="btn-logout" onClick={handleLogout}>
+              로그아웃
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
