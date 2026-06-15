@@ -148,7 +148,7 @@ export default function TransactionView() {
               </div>
 
               <div className="item-info">
-                <p className="item-detail">{item.detail}</p>
+                <p className="item-title">{item.title}</p>
                 <p className="item-meta">
                   {item.date} · {getCategoryName(item.cid)}
                 </p>

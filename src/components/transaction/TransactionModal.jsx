@@ -10,10 +10,10 @@ export default function TransactionModal({ transaction, onClose, onSubmit }) {
   const [form, setForm] = useState({
     date: transaction?.date || new Date().toISOString().slice(0, 10),
     type: transaction?.type || 'expense',
+    title: transaction?.title || '',
     amount: transaction?.amount || '',
     cid: transaction?.cid || '',
     memo: transaction?.memo || '',
-    detail: transaction?.detail || '',
   });
 
   const [errorMsg, setErrorMsg] = useState('');
@@ -28,7 +28,7 @@ export default function TransactionModal({ transaction, onClose, onSubmit }) {
     setErrorMsg('');
 
     // 유효성 검사
-    if (!form.date || !form.amount || !form.cid) {
+    if (!form.date || !form.title.trim() || !form.amount || !form.cid) {
       setErrorMsg('필수 항목을 입력해주세요.');
       return;
     }
@@ -92,6 +92,17 @@ export default function TransactionModal({ transaction, onClose, onSubmit }) {
           >
             수입
           </button>
+        </div>
+
+        <div className="field">
+          <label>제목</label>
+          <input
+            type="text"
+            placeholder="예: 스타벅스 커피, 월급"
+            value={form.title}
+            onChange={(e) => setForm({ ...form, title: e.target.value })}
+            maxLength={50}
+          />
         </div>
 
         <div className="field">
