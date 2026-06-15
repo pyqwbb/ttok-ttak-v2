@@ -4,6 +4,7 @@ import OnboardingView from '@/components/views/OnboardingView';
 import DashboardView from '@/components/views/DashboardView';
 import TransactionView from '@/components/views/TransactionView';
 import ProfileView from '@/components/views/ProfileView';
+import BudgetView from '@/components/views/BudgetView';
 
 export const router = createBrowserRouter([
   {
@@ -37,6 +38,16 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: <ProfileView />,
+      },
+    ],
+  },
+  {
+    path: 'budget',
+    element: <Sidebar />,
+    children: [
+      {
+        index: true,
+        element: <BudgetView />,
       },
     ],
   },

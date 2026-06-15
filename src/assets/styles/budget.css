@@ -1,0 +1,171 @@
+.budget-page {
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+/* 헤더 */
+.budget-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.budget-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.btn-add {
+  padding: 8px 16px;
+  background: #67ea76;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.btn-add:hover {
+  opacity: 0.85;
+}
+
+/* 예산 목록 */
+.budget-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.budget-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: white;
+  border: 1px solid #f0f0f0;
+  border-radius: 12px;
+  transition: box-shadow 0.15s;
+}
+
+.budget-item:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.budget-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.budget-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.budget-category {
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin: 0 0 2px;
+}
+
+.budget-amount {
+  font-size: 0.85rem;
+  color: #67ea76;
+  font-weight: 600;
+  margin: 0;
+}
+
+.budget-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.btn-edit {
+  padding: 5px 10px;
+  border-radius: 6px;
+  border: none;
+  background: #f0f0f0;
+  color: #555;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.btn-delete {
+  padding: 5px 10px;
+  border-radius: 6px;
+  border: none;
+  background: #fff0f0;
+  color: #e53e3e;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+/* 힌트 텍스트 */
+.field-hint {
+  font-size: 0.78rem;
+  color: #aaa;
+  margin: 4px 0 0;
+}
+
+/* 빈 상태 */
+.budget-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 60px 0;
+  text-align: center;
+  color: #aaa;
+}
+
+.budget-empty p:first-child {
+  font-size: 2.5rem;
+}
+
+.budget-empty p:nth-child(2) {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #555;
+}
+
+.budget-empty-sub {
+  font-size: 0.85rem;
+  color: #aaa;
+  max-width: 280px;
+  line-height: 1.5;
+}
+
+.btn-add-empty {
+  margin-top: 8px;
+  padding: 10px 24px;
+  background: #67ea76;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.btn-add-empty:hover {
+  opacity: 0.85;
+}
+
+/* 모바일 */
+@media (max-width: 768px) {
+  .budget-page {
+    padding: 1rem;
+  }
+}

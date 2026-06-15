@@ -15,6 +15,7 @@ const navItems = [
   { name: '대시보드', icon: '📊', path: '/dashboard' },
   { name: '거래내역', icon: '📝', path: '/transactions' },
   { name: '프로필', icon: '👤', path: '/profile' },
+  { name: '예산 설정', icon: '💰', path: '/budget' },
 ];
 
 export default function Layout() {
@@ -117,6 +118,15 @@ export default function Layout() {
       </div>
 
       <div className={`sidebar ${mobileMenuOpen ? 'is-open' : ''}`}>
+        {/* 모바일 닫기 버튼 */}
+        <button
+          className="sidebar-close"
+          onClick={closeMobileMenu}
+          aria-label="메뉴 닫기"
+          type="button"
+        >
+          ✕
+        </button>
         <div className="sidebar-logo">
           <img src={logo} alt="똑딱 로고" />
         </div>
