@@ -1,8 +1,14 @@
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css');
 
+@font-face {
+  font-family: 'KCC-Ganpan';
+  src: url('../fonts/KCC-Ganpan.ttf') format('truetype');
+}
+
 :root {
   /* 폰트 지정 */
   --font-main: 'Pretendard Variable', Pretendard, sans-serif;
+  --font-accent: 'KCC-Ganpan', sans-serif;
 
   /* ⚪️ Basic Colors */
   --color-white: #ffffff;

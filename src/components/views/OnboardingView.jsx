@@ -21,7 +21,7 @@ export default function OnboardingView() {
           alt="background glow"
         />
         <div className="onboarding-logo-text">
-          <strong>똑딱</strong>
+          똑딱
           <span>ttok ttak</span>
         </div>
       </div>

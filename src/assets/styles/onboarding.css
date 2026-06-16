@@ -42,16 +42,13 @@
   gap: 8px;
   color: #3c3c3c;
   text-align: center;
-}
-
-.onboarding-logo-text strong {
-  font-family: 'KCC-Ganpan', sans-serif;
-  font-size: 42px;
+  font-size: 50px;
   line-height: 1.1;
+  font-family: var(--font-accent);
 }
 
 .onboarding-logo-text span {
-  font-size: 15px;
+  font-size: 20px;
   letter-spacing: 0.04em;
 }
 
@@ -68,6 +65,22 @@
   width: 220px;
   height: 220px;
   object-fit: contain;
+  animation: floating 3s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes floating {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-12px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
 }
 
 .hero-star {
@@ -93,13 +106,13 @@
   height: 30px;
   border-radius: 50px;
   background: #fee15e;
+  font-family: var(--font-accent);
   display: flex;
   align-items: center;
   justify-content: center;
   color: #3c3c3c;
-  font-family: 'Hakgyoansim_Dunggeunmiso_TTF', sans-serif;
   font-weight: 700;
-  font-size: 18px;
+  font-size: 17px;
 }
 
 .hero-badge--left {
@@ -113,10 +126,12 @@
 }
 
 .onboarding-subtitle {
-  font-size: 10px;
+  font-size: 13px;
   color: #959999;
   letter-spacing: 0.04em;
   text-align: center;
+  margin-bottom: -15px;
+  font-family: var(--font-accent);
 }
 
 .btn-start {
@@ -126,7 +141,7 @@
   border-radius: 14px;
   background-color: #67ea76;
   color: #1a1a1a;
-  font-size: 16px;
+  font-size: 20px;
   font-weight: 700;
   cursor: pointer;
   transition:
