@@ -11,9 +11,14 @@ export default function ProgressBar({ chartData }) {
           style={{ animationDelay: `${i * 60}ms` }}
         >
           <div className="category-row">
-            <span className="category-icon">{item.img}</span>
+            <span
+              className="category-icon"
+              style={{ background: (item?.color ?? '#eee') + '33' }}
+            >
+              {item.img}
+            </span>
             <span className="category-name">{item.name}</span>
-            <span className="category-amount">
+            <span className="category-amount" style={{ color: item.color }}>
               {item.amount.toLocaleString()}원
             </span>
           </div>
@@ -28,7 +33,7 @@ export default function ProgressBar({ chartData }) {
                       Math.round((item.amount / item.goalAmount) * 100),
                       100,
                     )}%`,
-                    backgroundColor: '#FF6B6B',
+                    backgroundColor: item.color,
                     animationDelay: `${i * 60 + 200}ms`,
                   }}
                 ></div>
@@ -36,7 +41,7 @@ export default function ProgressBar({ chartData }) {
               <span
                 className="progress-pct"
                 style={{
-                  color: '#FF6B6B',
+                  color: item.color,
                 }}
               >
                 {Math.min(

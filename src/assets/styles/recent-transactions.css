@@ -1,0 +1,72 @@
+.recent-card {
+  background: white;
+  border-radius: 20px;
+  padding: 24px;
+  width: 100%;
+  box-shadow: 0 4px 10px hsla(180, 7%, 19%, 0.15);
+
+  transition: transform 0.2s ease;
+}
+
+.recent-card:hover {
+  transform: translateY(-2px);
+}
+
+.recent-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #959999;
+  margin: 0 0 18px;
+}
+
+.recent-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.recent-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.recent-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.recent-name {
+  flex: 1;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #2c3333;
+  margin: 0;
+}
+
+.recent-amount {
+  font-size: 1.05rem;
+  font-weight: 500;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.recent-amount.expense {
+  color: #ff7676;
+}
+
+.recent-amount.income {
+  color: #4da8da;
+}
+
+.recent-unit {
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-left: 2px;
+}

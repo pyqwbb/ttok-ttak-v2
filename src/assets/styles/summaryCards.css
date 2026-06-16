@@ -2,7 +2,7 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
-  width: 80%;
+  width: 100%;
 }
 
 .summary-card {
@@ -26,10 +26,13 @@
   font-size: 16px;
 }
 
-.card-label {
+.summary-cards .card-label {
   margin: 0;
   font-size: 16px;
   font-weight: 500;
+  span {
+    font-weight: 700;
+  }
 }
 
 .card-label.expense {
