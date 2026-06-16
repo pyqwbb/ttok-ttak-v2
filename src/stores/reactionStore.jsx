@@ -11,6 +11,7 @@ const ReactionContext = createContext();
 
 export const ReactionProvider = ({ children }) => {
   const [reactionMessages, setReactionMessages] = useState([]);
+  const [monthlySummaryMessages, setMonthlySummaryMessages] = useState([]);
   const [loaded, setLoaded] = useState(false);
 
   const fetchReactionMessages = useCallback(async () => {
@@ -23,6 +24,15 @@ export const ReactionProvider = ({ children }) => {
       console.error('Failed to fetch reaction messages:', error);
     }
   }, [loaded]);
+
+  const fetchMonthlySummaryMessages = useCallback(async () => {
+    try {
+      const res = await reactionApi.getMonthlySummaryMessages();
+      setMonthlySummaryMessages(res.data);
+    } catch (error) {
+      console.error('Failed to fetch monthly summary messages:', error);
+    }
+  }, []);
 
   /**
    * 방금 추가된 거래의 카테고리 + 이번 달 누적 횟수를 받아 출력할 메시지 결정
@@ -49,9 +59,17 @@ export const ReactionProvider = ({ children }) => {
     () => ({
       reactionMessages,
       fetchReactionMessages,
+      monthlySummaryMessages,
+      fetchMonthlySummaryMessages,
       resolveMessage,
     }),
-    [reactionMessages, fetchReactionMessages, resolveMessage],
+    [
+      reactionMessages,
+      fetchReactionMessages,
+      monthlySummaryMessages,
+      fetchMonthlySummaryMessages,
+      resolveMessage,
+    ],
   );
 
   return (
