@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUserStore } from '@/stores/userStore';
+import CompleteModal from '@/components/common/CompleteModal';
 import profileIcon from '@/assets/icons/profile.svg';
 import '@/assets/styles/profile.css';
 
@@ -18,6 +19,7 @@ export default function ProfileView() {
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const [showCompleteModal, setShowCompleteModal] = useState(false);
 
   const [form, setForm] = useState({
     nickname: userStore.user?.nickname || '',
@@ -76,6 +78,7 @@ export default function ProfileView() {
       await userStore.updateUser(userInfo.id, form);
       setIsEditing(false);
       setErrors({});
+      setShowCompleteModal(true); // 저장 완료 모달 표시
     } catch (error) {
       console.error('Failed to save profile:', error);
     } finally {
@@ -94,7 +97,6 @@ export default function ProfileView() {
           {isEditing ? '프로필 수정' : '내 프로필'}
         </h2>
 
-        {/* 뷰 모드와 편집 모드를 동시에 렌더하되 CSS 클래스 토글로 전환 애니메이션을 처리합니다. */}
         <div
           className={`mode-section view-mode ${isEditing ? 'inactive' : 'active'}`}
           aria-hidden={isEditing}
@@ -209,6 +211,17 @@ export default function ProfileView() {
           </div>
         )}
       </div>
+
+      {/* 저장 완료 모달 */}
+      {showCompleteModal && (
+        <CompleteModal
+          visible={showCompleteModal}
+          icon="✅"
+          title="수정 완료!"
+          description="프로필이 수정됐어요."
+          onClose={() => setShowCompleteModal(false)}
+        />
+      )}
     </div>
   );
 }
