@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
-import MonthSelector from '@/components/common/MonthSelector';
 import { useCategoryStore } from '@/stores/categoryStore';
 import { useUserStore } from '@/stores/userStore';
 import { useReactionStore } from '@/stores/reactionStore';
+import MonthSelector from '@/components/common/MonthSelector';
+import SummaryCards from '@/components/dashboard/SummaryCards';
 import BubbleChart from '@/components/dashboard/bubbleChart';
 import ProgressBar from '@/components/dashboard/ProgressBar';
 import '@/assets/styles/dashboard.css';
@@ -44,6 +45,8 @@ export default function DashboardView() {
           <div className="summary-message">{summaryMessage}</div>
         )}
       </div>
+
+      <SummaryCards />
 
       <div>
         <p className="subtitle">카테고리 별 수입/지출</p>
