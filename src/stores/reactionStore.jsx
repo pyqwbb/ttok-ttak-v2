@@ -43,9 +43,9 @@ export const ReactionProvider = ({ children }) => {
    */
   const resolveMessage = useCallback(
     (cid, count, categoryName) => {
-      // cid + goalCount가 정확히 일치하는 메시지 우선
+      // cid + goal_count 정확히 일치하는 메시지 우선
       const exact = reactionMessages.find(
-        (m) => String(m.cid) === String(cid) && Number(m.goalCount) === count,
+        (m) => String(m.cid) === String(cid) && Number(m.goal_count) === count,
       );
       if (exact) return exact.message;
 

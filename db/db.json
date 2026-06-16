@@ -4,21 +4,23 @@
       "id": "1",
       "nickname": "똑딱이",
       "email": "ttokttak@example.com",
+      "password": "password123",
       "age": "20대",
       "gender": "F",
-      "count": 25,
-      "cid": 1,
-      "budgetCount": 3
+      "provider": "local",
+      "provider_id": null,
+      "created_at": "2026-06-01T00:00:00Z"
     },
     {
       "id": "2",
       "nickname": "절약왕",
       "email": "saveking@test.com",
+      "password": "password123",
       "age": 30,
       "gender": "M",
-      "count": 8,
-      "cid": 4,
-      "budgetCount": 5
+      "provider": "local",
+      "provider_id": null,
+      "created_at": "2026-06-01T00:00:00Z"
     }
   ],
   "CATEGORY": [
@@ -283,39 +285,7 @@
       "uid": 1
     }
   ],
-  "reactionCount": [
-    {
-      "id": "1",
-      "cid": 1,
-      "uid": 1,
-      "currentCount": 4
-    },
-    {
-      "id": "2",
-      "cid": 2,
-      "uid": 1,
-      "currentCount": 3
-    },
-    {
-      "id": "3",
-      "cid": 3,
-      "uid": 1,
-      "currentCount": 1
-    },
-    {
-      "id": "4",
-      "cid": 5,
-      "uid": 1,
-      "currentCount": 1
-    },
-    {
-      "id": "5",
-      "cid": 7,
-      "uid": 1,
-      "currentCount": 1
-    }
-  ],
-  "monthlySummaryMessages": [
+  "MONTHLY_SUMMARY_MESSAGE": [
     {
       "id": "1",
       "cid": 1,
@@ -496,65 +466,65 @@
       "amount": 150000
     }
   ],
-  "reactionMessages": [
+  "REACTION_MESSAGE": [
     {
       "id": "1",
       "cid": 1,
-      "goalCount": 1,
+      "goal_count": 1,
       "message": "🍚 이번 달 첫 식사 기록! 맛있게 드셨나요?"
     },
     {
       "id": "2",
       "cid": 1,
-      "goalCount": 5,
+      "goal_count": 5,
       "message": "🍚 벌써 5번째 식사 기록이네요! 규칙적인 식사 칭찬해요."
     },
     {
       "id": "3",
       "cid": 1,
-      "goalCount": 10,
+      "goal_count": 10,
       "message": "🍚 어느덧 10번째 식사! 잘 챙겨 먹는 당신이 챔피언."
     },
     {
       "id": "4",
       "cid": 2,
-      "goalCount": 1,
+      "goal_count": 1,
       "message": "☕ 이번 달 첫 커피네요! 향긋한 하루 되세요."
     },
     {
       "id": "5",
       "cid": 2,
-      "goalCount": 5,
+      "goal_count": 5,
       "message": "☕ 벌써 5잔째! 카페인 수혈 완료인가요? ⚡"
     },
     {
       "id": "6",
       "cid": 3,
-      "goalCount": 1,
+      "goal_count": 1,
       "message": "🛒 필요한 물건을 똑똑하게 구매하셨나요? 첫 마트 기록이에요."
     },
     {
       "id": "7",
       "cid": 4,
-      "goalCount": 1,
+      "goal_count": 1,
       "message": "🏦 미래의 나를 위한 첫 저축! 아주 훌륭해요 ✨"
     },
     {
       "id": "8",
       "cid": 5,
-      "goalCount": 1,
+      "goal_count": 1,
       "message": "🚌 이번 달 첫 이동 기록! 오늘도 고생 많으셨어요."
     },
     {
       "id": "9",
       "cid": 7,
-      "goalCount": 1,
+      "goal_count": 1,
       "message": "🎬 첫 문화생활! 예술적 감성 충전 중?"
     },
     {
       "id": "10",
       "cid": 8,
-      "goalCount": 1,
+      "goal_count": 1,
       "message": "💄 나를 위한 선물! 더 예뻐질 준비 됐나요?"
     }
   ],
