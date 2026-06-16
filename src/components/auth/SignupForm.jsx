@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
 import { useUserStore } from '@/stores/userStore';
 
+const AGE_OPTIONS = ['10대', '20대', '30대', '40대', '50대', '60대 이상'];
+const GENDER_OPTIONS = [
+  { value: 'male', label: '남성' },
+  { value: 'female', label: '여성' },
+  { value: 'other', label: '기타' },
+];
+
 export default function SignupForm({ onSwitch }) {
   const userStore = useUserStore();
 
@@ -9,41 +16,71 @@ export default function SignupForm({ onSwitch }) {
     password: '',
     passwordConfirm: '',
     nickname: '',
+    age: '',
+    gender: '',
   });
 
   const [errorMsg, setErrorMsg] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSignup = async () => {
-    setErrorMsg('');
+  const handleChange = (field) => (e) =>
+    setForm((prev) => ({ ...prev, [field]: e.target.value }));
 
-    // 유효성 검사
-    if (!form.email || !form.password || !form.nickname) {
-      setErrorMsg('모든 필드를 입력해주세요.');
-      return;
+  const validate = () => {
+    if (
+      !form.email ||
+      !form.password ||
+      !form.nickname ||
+      !form.age ||
+      !form.gender
+    ) {
+      setErrorMsg('모든 항목을 입력해주세요.');
+      return false;
     }
 
-    if (form.password !== form.passwordConfirm) {
-      setErrorMsg('비밀번호가 일치하지 않습니다.');
-      return;
+    // 닉네임 2~10글자
+    if (form.nickname.length < 2 || form.nickname.length > 10) {
+      setErrorMsg('닉네임은 2~10글자로 입력해주세요.');
+      return false;
     }
 
+    // 이메일 형식
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(form.email)) {
+      setErrorMsg('올바른 이메일 형식이 아니에요.');
+      return false;
+    }
+
+    // 비밀번호 6글자 이상
     if (form.password.length < 6) {
       setErrorMsg('비밀번호는 최소 6글자 이상이어야 합니다.');
-      return;
+      return false;
     }
 
-    setIsLoading(true);
+    // 비밀번호 확인
+    if (form.password !== form.passwordConfirm) {
+      setErrorMsg('비밀번호가 일치하지 않습니다.');
+      return false;
+    }
 
+    return true;
+  };
+
+  const handleSignup = async () => {
+    setErrorMsg('');
+    if (!validate()) return;
+
+    setIsLoading(true);
     try {
       // TODO: 실제 API 연결
       console.log('회원가입 시도:', form);
 
-      // 임시 처리
       await userStore.createUser({
         email: form.email,
         password: form.password,
         nickname: form.nickname,
+        age: form.age,
+        gender: form.gender,
       });
 
       onSwitch?.();
@@ -58,58 +95,92 @@ export default function SignupForm({ onSwitch }) {
   };
 
   const handleKeyUp = (e) => {
-    if (e.key === 'Enter') {
-      handleSignup();
-    }
+    if (e.key === 'Enter') handleSignup();
   };
 
   return (
     <div className="form">
+      {/* 이메일 */}
       <div className="field">
         <label>이메일</label>
         <input
           type="email"
           placeholder="이메일을 입력해주세요"
           value={form.email}
-          onChange={(e) => setForm({ ...form, email: e.target.value })}
+          onChange={handleChange('email')}
           onKeyUp={handleKeyUp}
         />
       </div>
 
+      {/* 닉네임 */}
       <div className="field">
         <label>닉네임</label>
         <input
           type="text"
-          placeholder="닉네임을 입력해주세요"
+          placeholder="2~10글자로 입력해주세요"
           value={form.nickname}
-          onChange={(e) => setForm({ ...form, nickname: e.target.value })}
+          onChange={handleChange('nickname')}
           onKeyUp={handleKeyUp}
           maxLength={10}
         />
       </div>
 
+      {/* 비밀번호 */}
       <div className="field">
         <label>비밀번호</label>
         <input
           type="password"
-          placeholder="비밀번호를 입력해주세요"
+          placeholder="6글자 이상 입력해주세요"
           value={form.password}
-          onChange={(e) => setForm({ ...form, password: e.target.value })}
+          onChange={handleChange('password')}
           onKeyUp={handleKeyUp}
         />
       </div>
 
+      {/* 비밀번호 확인 */}
       <div className="field">
         <label>비밀번호 확인</label>
         <input
           type="password"
           placeholder="비밀번호를 다시 입력해주세요"
           value={form.passwordConfirm}
-          onChange={(e) =>
-            setForm({ ...form, passwordConfirm: e.target.value })
-          }
+          onChange={handleChange('passwordConfirm')}
           onKeyUp={handleKeyUp}
         />
+      </div>
+
+      {/* 연령대 */}
+      <div className="field">
+        <label>연령대</label>
+        <select value={form.age} onChange={handleChange('age')}>
+          <option value="" disabled>
+            선택해주세요
+          </option>
+          {AGE_OPTIONS.map((age) => (
+            <option key={age} value={age}>
+              {age}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* 성별 */}
+      <div className="field">
+        <label>성별</label>
+        <div className="radio-group">
+          {GENDER_OPTIONS.map((g) => (
+            <label key={g.value} className="radio-item">
+              <input
+                type="radio"
+                name="gender"
+                value={g.value}
+                checked={form.gender === g.value}
+                onChange={handleChange('gender')}
+              />
+              {g.label}
+            </label>
+          ))}
+        </div>
       </div>
 
       {errorMsg && <p className="error">{errorMsg}</p>}
@@ -124,12 +195,7 @@ export default function SignupForm({ onSwitch }) {
 
       <p className="switch-link">
         이미 계정이 있으신가요?
-        <span
-          onClick={onSwitch}
-          style={{ cursor: 'pointer', color: '#0066cc' }}
-        >
-          로그인
-        </span>
+        <span onClick={onSwitch}>로그인</span>
       </p>
     </div>
   );
