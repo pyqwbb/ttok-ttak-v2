@@ -137,8 +137,7 @@ export default function BubbleChart({ chartData, expenseCount }) {
               cx={bubble.cx}
               cy={bubble.cy}
               r={bubble.r}
-              fill={bubble.color + 'AA'}
-              stroke={bubble.color}
+              fill={bubble.color + '4D'}
               strokeWidth="1"
               className="bubble-circle"
               style={{
@@ -153,9 +152,9 @@ export default function BubbleChart({ chartData, expenseCount }) {
               y={bubble.cy}
               textAnchor="middle"
               dominantBaseline="middle"
-              fontSize={Math.max(11, Math.round(bubble.r * 0.28))}
-              fontWeight="500"
-              fill="#444"
+              fontSize={Math.max(11, Math.round(bubble.r * 0.4))}
+              fontWeight="bold"
+              fill={bubble.color}
               className="bubble-label"
               style={{
                 animationDelay: `${i * 80 + 300}ms`,
