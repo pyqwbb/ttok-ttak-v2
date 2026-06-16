@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { useCategoryStore } from '@/stores/categoryStore';
 import TransactionModal from '@/components/transaction/TransactionModal';
 import ConfirmModal from '@/components/common/ConfirmModal';
+import MonthSelector from '@/components/common/MonthSelector';
 import '@/assets/styles/transaction.css';
 
 export default function TransactionView() {
@@ -57,14 +58,6 @@ export default function TransactionView() {
     return { totalIncome: income, totalExpense: expense };
   }, [filteredBudgets]);
 
-  const changeMonth = (offset) => {
-    setCurrentDate((prev) => {
-      const next = new Date(prev);
-      next.setMonth(next.getMonth() + offset);
-      return next;
-    });
-  };
-
   const getCategoryImg = (cid) => {
     const cat = categoryStore.categories.find((c) => c.id === cid);
     return cat?.img || '📁';
@@ -95,13 +88,7 @@ export default function TransactionView() {
       </div>
 
       <div className="filter-bar">
-        <div className="filter-month">
-          <button onClick={() => changeMonth(-1)}>‹</button>
-          <span>
-            {currentYear}년 {currentMonth}월
-          </span>
-          <button onClick={() => changeMonth(1)}>›</button>
-        </div>
+        <MonthSelector currentDate={currentDate} onChange={setCurrentDate} />
 
         <div className="filter-type">
           {typeOptions.map((t) => (

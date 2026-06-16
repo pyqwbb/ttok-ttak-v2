@@ -1,0 +1,30 @@
+.month-selector {
+  display: inline-flex;
+  align-items: center;
+  gap: 17px;
+  border-radius: 999px;
+}
+
+.month-arrow {
+  width: 25px;
+  height: 25px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(103, 234, 118, 0.2);
+  color: #67ea76;
+  font-size: 0.8rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.month-label {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2c3333;
+  min-width: 36px;
+  text-align: center;
+}

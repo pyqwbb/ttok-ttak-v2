@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
+import MonthSelector from '@/components/common/MonthSelector';
 import { useCategoryStore } from '@/stores/categoryStore';
 import { useUserStore } from '@/stores/userStore';
 import BubbleChart from '@/components/dashboard/bubbleChart';
@@ -9,16 +10,16 @@ export default function DashboardView() {
   const store = useCategoryStore();
   const userStore = useUserStore();
   const [hasLoaded, setHasLoaded] = useState(false);
+  const [currentDate, setCurrentDate] = useState(new Date());
 
   useEffect(() => {
     const uid = userStore.user?.id || localStorage.getItem('userId');
 
-    // 이미 데이터가 로드되었으면 다시 로드하지 않음
     if (!hasLoaded && uid && !store.isLoading) {
       store.fetchAll(uid);
       setHasLoaded(true);
     }
-  }, [hasLoaded]); // 한 번만 실행
+  }, [hasLoaded]);
 
   if (store.isLoading) {
     return <div className="loading">로딩중...</div>;
@@ -26,12 +27,16 @@ export default function DashboardView() {
 
   return (
     <div className="chart-page">
-      <p className="subtitle">카테고리 별 수입/지출</p>
-      <h2 className="title">
-        {store.topCountCategory
-          ? `${store.topCountCategory.img} ${store.topCountCategory.name}에 가장 자주 지출하고 있어요`
-          : '이번 달 지출 내역이 없어요'}
-      </h2>
+      <MonthSelector currentDate={currentDate} onChange={setCurrentDate} />
+
+      <div>
+        <p className="subtitle">카테고리 별 수입/지출</p>
+        <h2 className="title">
+          {store.topCountCategory
+            ? `${store.topCountCategory.img} ${store.topCountCategory.name}에 가장 자주 지출하고 있어요`
+            : '이번 달 지출 내역이 없어요'}
+        </h2>
+      </div>
 
       {store.chartData.length > 0 ? (
         <div className="content">
