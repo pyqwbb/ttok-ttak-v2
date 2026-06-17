@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
-import { useCategoryStore } from '@/stores/categoryStore';
-import { useUserStore } from '@/stores/userStore';
-import { useReactionStore } from '@/stores/reactionStore';
+import { useCategoryStore } from '@/store/useCategoryStore';
+import { useUserStore } from '@/store/useUserStore';
+import { useReactionStore } from '@/store/useReactionStore';
 import BadgeGrid from '@/components/gamification/BadgeGrid';
 import TransactionModal from '@/components/transaction/TransactionModal';
 import ReactionModal from '@/components/gamification/ReactionModal';

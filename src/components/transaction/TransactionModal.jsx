@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { useCategoryStore } from '@/stores/categoryStore';
+import { useCategoryStore } from '@/store/useCategoryStore';
 import BaseModal from '@/components/common/BaseModal';
 import '@/assets/styles/transaction-modal.css';
 

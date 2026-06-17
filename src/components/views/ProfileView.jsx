@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useUserStore } from '@/stores/userStore';
+import { useUserStore } from '@/store/useUserStore';
 import CompleteModal from '@/components/common/CompleteModal';
 import profileIcon from '@/assets/icons/profile.svg';
 import '@/assets/styles/profile.css';

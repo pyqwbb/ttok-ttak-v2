@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useCategoryStore } from '@/stores/categoryStore';
-import { useUserStore } from '@/stores/userStore';
-import { useReactionStore } from '@/stores/reactionStore';
+import { useCategoryStore } from '@/store/useCategoryStore';
+import { useUserStore } from '@/store/useUserStore';
+import { useReactionStore } from '@/store/useReactionStore';
 import MonthSelector from '@/components/common/MonthSelector';
 import SummaryCards from '@/components/dashboard/SummaryCards';
 import BubbleChart from '@/components/dashboard/bubbleChart';
@@ -16,8 +16,15 @@ export default function DashboardView() {
   const [hasLoaded, setHasLoaded] = useState(false);
   const [currentDate, setCurrentDate] = useState(new Date());
 
+  // 💡 [수정] Zustand 게터 함수 호출 방식으로 변경
+  const topExpenseCategory = store.getTopExpenseCategory();
+  const chartData = store.getChartData();
+  const topCountCategory = store.getTopCountCategory();
+  const expenseCountByCategory = store.getExpenseCountByCategory();
+
+  // 💡 [수정] topExpenseCategory?.id 기반으로 필터링하도록 수정
   const messages = reactionStore.monthlySummaryMessages.filter(
-    (m) => String(m.cid) === String(store.topExpenseCategory?.id),
+    (m) => String(m.cid) === String(topExpenseCategory?.id),
   );
 
   const summaryMessage =
@@ -37,7 +44,7 @@ export default function DashboardView() {
       reactionStore.fetchMonthlySummaryMessages();
       setHasLoaded(true);
     }
-  }, [hasLoaded]);
+  }, [hasLoaded, userStore.user?.id, store, reactionStore]); // 의존성 배열 보완
 
   if (store.isLoading) {
     return <div className="loading">로딩중...</div>;
@@ -56,26 +63,27 @@ export default function DashboardView() {
         <div className="left-section">
           <SummaryCards />
 
-          {store.chartData.length > 0 ? (
+          {/* 💡 [수정] 변수명 매핑 */}
+          {chartData.length > 0 ? (
             <div className="content">
               <div>
                 <p className="subtitle">카테고리 별 수입/지출</p>
                 <h2 className="title">
-                  {store.topCountCategory
-                    ? `${store.topCountCategory.name}에 가장 자주 지출하고 있어요`
+                  {topCountCategory
+                    ? `${topCountCategory.name}에 가장 자주 지출하고 있어요`
                     : '이번 달 지출 내역이 없어요'}
                 </h2>
               </div>
               <div className="content-main">
                 <div className="content-item">
                   <BubbleChart
-                    chartData={store.chartData}
-                    expenseCount={store.expenseCountByCategory}
+                    chartData={chartData}
+                    expenseCount={expenseCountByCategory}
                   />
                 </div>
 
                 <div className="content-item">
-                  <ProgressBar chartData={store.chartData} />
+                  <ProgressBar chartData={chartData} />
                 </div>
               </div>
             </div>

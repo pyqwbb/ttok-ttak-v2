@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useUserStore } from '@/stores/userStore';
+import { useUserStore } from '@/store/useUserStore';
 
 const AGE_OPTIONS = ['10대', '20대', '30대', '40대', '50대', '60대 이상'];
 const GENDER_OPTIONS = [

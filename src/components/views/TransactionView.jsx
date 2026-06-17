@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { useCategoryStore } from '@/stores/categoryStore';
+import { useCategoryStore } from '@/store/useCategoryStore';
 import TransactionModal from '@/components/transaction/TransactionModal';
 import ConfirmModal from '@/components/common/ConfirmModal';
 import MonthSelector from '@/components/common/MonthSelector';

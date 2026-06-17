@@ -1,8 +1,8 @@
 import React from 'react';
 import { RouterProvider } from 'react-router-dom';
-import { UserProvider } from './stores/userStore';
-import { CategoryProvider } from './stores/categoryStore';
-import { ReactionProvider } from './stores/reactionStore';
+import { UserProvider } from './store/useUserStore';
+import { CategoryProvider } from './store/useCategoryStore';
+import { ReactionProvider } from './store/useReactionStore';
 import router from './router';
 
 function App() {

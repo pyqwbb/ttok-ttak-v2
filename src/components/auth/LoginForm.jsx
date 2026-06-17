@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useUserStore } from '@/stores/userStore';
+import { useUserStore } from '@/store/useUserStore';
 import { useNavigate } from 'react-router-dom';
 
 export default function LoginForm({ onSwitch, onSuccess }) {

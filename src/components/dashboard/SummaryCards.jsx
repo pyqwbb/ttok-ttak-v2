@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useCategoryStore } from '@/stores/categoryStore';
+import { useCategoryStore } from '@/store/useCategoryStore';
 import '@/assets/styles/summaryCards.css';
 
 export default function SummaryCards() {

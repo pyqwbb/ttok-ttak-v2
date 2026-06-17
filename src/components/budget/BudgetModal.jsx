@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { useUserStore } from '@/stores/userStore';
-import { useCategoryStore } from '@/stores/categoryStore';
+import { useUserStore } from '@/store/useUserStore';
+import { useCategoryStore } from '@/store/useCategoryStore';
 import BaseModal from '@/components/common/BaseModal';
 
 export default function BudgetModal({
