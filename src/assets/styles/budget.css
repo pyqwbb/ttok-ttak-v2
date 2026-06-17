@@ -2,7 +2,7 @@
   width: 100%;
   max-width: 640px;
   margin: 0 auto;
-  padding: 2rem 1rem;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
@@ -161,11 +161,4 @@
 
 .btn-add-empty:hover {
   opacity: 0.85;
-}
-
-/* 모바일 */
-@media (max-width: 768px) {
-  .budget-page {
-    padding: 1rem;
-  }
 }

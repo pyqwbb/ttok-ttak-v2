@@ -293,18 +293,3 @@
     padding: 0 24px;
   }
 }
-
-@media (max-width: 768px) {
-  .sidebar {
-    width: 100%;
-    max-width: 100%;
-  }
-
-  .nav-icon {
-    margin-left: 16px;
-  }
-
-  .add-transaction-btn {
-    width: 100%;
-  }
-}

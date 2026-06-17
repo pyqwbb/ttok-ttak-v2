@@ -54,7 +54,7 @@
   color: #2c3333;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
   .summary-cards {
     grid-template-columns: 1fr;
     width: 100%;
