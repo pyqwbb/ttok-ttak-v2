@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import '@/assets/styles/reaction-modal.css';
+import './reaction-modal.css';
 
 export default function ReactionModal({ message, onClose }) {
   useEffect(() => {

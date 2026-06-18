@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import placeholder from '@/assets/icons/placeholder.svg';
-import '@/assets/styles/badge-grid.css';
+import './badge-grid.css';
 
 export default function BadgeGrid({ monthlyTopCountCategories = [] }) {
   const badges = useMemo(() => {

@@ -7,7 +7,7 @@ import SummaryCards from '@/components/dashboard/SummaryCards';
 import BubbleChart from '@/components/dashboard/bubbleChart';
 import ProgressBar from '@/components/dashboard/ProgressBar';
 import RecentTransactions from '@/components/dashboard/RecentTransactions';
-import '@/assets/styles/dashboard.css';
+import './dashboard-page.css';
 
 export default function DashboardView() {
   const store = useCategoryStore();

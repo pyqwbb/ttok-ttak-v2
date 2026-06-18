@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import AuthModal from '@/components/auth/AuthModal';
-import '@/assets/styles/onboarding.css';
+import './onboarding-page.css';
 
 const imgEllipse22 =
   'https://www.figma.com/api/mcp/asset/45410fcf-ee0d-43a6-9ad3-2389a0ae3a68';

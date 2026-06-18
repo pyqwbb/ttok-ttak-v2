@@ -1,4 +1,4 @@
-import '@/assets/styles/month-selector.css';
+import './month-selector.css';
 
 export default function MonthSelector({ currentDate, onChange }) {
   const year = currentDate.getFullYear();

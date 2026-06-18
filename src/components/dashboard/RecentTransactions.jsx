@@ -1,4 +1,4 @@
-import '@/assets/styles/recent-transactions.css';
+import './recent-transactions.css';
 
 export default function RecentTransactions({ transactions, categories }) {
   const getCategory = (cid) =>

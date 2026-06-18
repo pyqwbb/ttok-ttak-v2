@@ -1,5 +1,5 @@
 import React from 'react';
-import '@/assets/styles/complete-modal.css';
+import './complete-modal.css';
 
 export default function CompleteModal({ message, onClose }) {
   return (

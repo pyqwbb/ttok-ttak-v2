@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useCategoryStore } from '@/stores/categoryStore';
-import '@/assets/styles/summaryCards.css';
+import './summary-cards.css';
 
 export default function SummaryCards() {
   const { budgets, totalExpense } = useCategoryStore();

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import '@/assets/styles/modal.css';
+import './base-modal.css';
 
 export default function BaseModal({ title, onClose, children, footer }) {
   useEffect(() => {

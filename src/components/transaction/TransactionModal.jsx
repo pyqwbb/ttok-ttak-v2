@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { useCategoryStore } from '@/stores/categoryStore';
 import BaseModal from '@/components/common/BaseModal';
-import '@/assets/styles/transaction-modal.css';
+import './transaction-modal.css';
 
 export default function TransactionModal({ transaction, onClose, onSubmit }) {
   const categoryStore = useCategoryStore();

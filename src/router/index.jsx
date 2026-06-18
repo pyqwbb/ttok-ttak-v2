@@ -1,10 +1,10 @@
 import { createBrowserRouter } from 'react-router-dom';
 import Sidebar from '@/components/layout/Sidebar';
-import OnboardingView from '@/components/views/OnboardingView';
-import DashboardView from '@/components/views/DashboardView';
-import TransactionView from '@/components/views/TransactionView';
-import ProfileView from '@/components/views/ProfileView';
-import BudgetView from '@/components/views/BudgetView';
+import OnboardingView from '@/pages/OnboardingPage';
+import DashboardView from '@/pages/DashboardPage';
+import TransactionView from '@/pages/TransactionPage';
+import ProfileView from '@/pages/ProfilePage';
+import BudgetView from '@/pages/BudgetPage';
 
 export const router = createBrowserRouter([
   {

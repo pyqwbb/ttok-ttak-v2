@@ -1,5 +1,5 @@
 import React from 'react';
-import BaseModal from '@/components/common/BaseModal';
+import BaseModal from './BaseModal';
 
 export default function ConfirmModal({ title, message, onConfirm, onCancel }) {
   return (

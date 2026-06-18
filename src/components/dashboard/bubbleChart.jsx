@@ -1,6 +1,6 @@
 // src/components/dashboard/BubbleChart.jsx
 import { useState, useRef, useEffect, useMemo } from 'react';
-import '@/assets/styles/bubble-chart.css';
+import './bubble-chart.css';
 
 export default function BubbleChart({ chartData, expenseCount }) {
   const bubbleWrapRef = useRef(null);

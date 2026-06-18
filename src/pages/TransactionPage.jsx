@@ -3,7 +3,7 @@ import { useCategoryStore } from '@/stores/categoryStore';
 import TransactionModal from '@/components/transaction/TransactionModal';
 import ConfirmModal from '@/components/common/ConfirmModal';
 import MonthSelector from '@/components/common/MonthSelector';
-import '@/assets/styles/transaction.css';
+import './transaction-page.css';
 
 export default function TransactionView() {
   const categoryStore = useCategoryStore();

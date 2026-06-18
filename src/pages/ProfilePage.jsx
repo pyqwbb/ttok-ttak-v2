@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useUserStore } from '@/stores/userStore';
 import CompleteModal from '@/components/common/CompleteModal';
 import { PROFILE_IMAGES } from '@/utils/profileImages';
-import '@/assets/styles/profile.css';
+import './profile-page.css';
 
 export default function ProfileView() {
   const navigate = useNavigate();

@@ -3,7 +3,7 @@ import { useCategoryStore } from '@/stores/categoryStore';
 import { useUserStore } from '@/stores/userStore';
 import BudgetModal from '@/components/budget/BudgetModal';
 import ConfirmModal from '@/components/common/ConfirmModal';
-import '@/assets/styles/budget.css';
+import './budget-page.css';
 
 export default function BudgetView() {
   const categoryStore = useCategoryStore();
