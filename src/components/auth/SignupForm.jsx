@@ -1,13 +1,6 @@
 import React, { useState } from 'react';
 import { useUserStore } from '@/store/useUserStore';
 
-const AGE_OPTIONS = ['10대', '20대', '30대', '40대', '50대', '60대 이상'];
-const GENDER_OPTIONS = [
-  { value: 'male', label: '남성' },
-  { value: 'female', label: '여성' },
-  { value: 'other', label: '기타' },
-];
-
 export default function SignupForm({ onSwitch }) {
   const userStore = useUserStore();
 
@@ -16,8 +9,6 @@ export default function SignupForm({ onSwitch }) {
     password: '',
     passwordConfirm: '',
     nickname: '',
-    age: '',
-    gender: '',
   });
 
   const [errorMsg, setErrorMsg] = useState('');
@@ -27,13 +18,7 @@ export default function SignupForm({ onSwitch }) {
     setForm((prev) => ({ ...prev, [field]: e.target.value }));
 
   const validate = () => {
-    if (
-      !form.email ||
-      !form.password ||
-      !form.nickname ||
-      !form.age ||
-      !form.gender
-    ) {
+    if (!form.email || !form.password || !form.nickname) {
       setErrorMsg('모든 항목을 입력해주세요.');
       return false;
     }
@@ -79,8 +64,6 @@ export default function SignupForm({ onSwitch }) {
         email: form.email,
         password: form.password,
         nickname: form.nickname,
-        age: form.age,
-        gender: form.gender,
       });
 
       onSwitch?.();
@@ -149,40 +132,6 @@ export default function SignupForm({ onSwitch }) {
         />
       </div>
 
-      {/* 연령대 */}
-      <div className="field">
-        <label>연령대</label>
-        <select value={form.age} onChange={handleChange('age')}>
-          <option value="" disabled>
-            선택해주세요
-          </option>
-          {AGE_OPTIONS.map((age) => (
-            <option key={age} value={age}>
-              {age}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {/* 성별 */}
-      <div className="field">
-        <label>성별</label>
-        <div className="radio-group">
-          {GENDER_OPTIONS.map((g) => (
-            <label key={g.value} className="radio-item">
-              <input
-                type="radio"
-                name="gender"
-                value={g.value}
-                checked={form.gender === g.value}
-                onChange={handleChange('gender')}
-              />
-              {g.label}
-            </label>
-          ))}
-        </div>
-      </div>
-
       {errorMsg && <p className="error">{errorMsg}</p>}
 
       <button
@@ -194,7 +143,7 @@ export default function SignupForm({ onSwitch }) {
       </button>
 
       <p className="switch-link">
-        이미 계정이 있으신가요?
+        이미 계정이 있으신가요?&nbsp;&nbsp;
         <span onClick={onSwitch}>로그인</span>
       </p>
     </div>

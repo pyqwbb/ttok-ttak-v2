@@ -93,13 +93,8 @@ export default function LoginForm({ onSwitch, onSuccess }) {
       </button>
 
       <p className="switch-link">
-        아직 계정이 없으신가요?
-        <span
-          onClick={onSwitch}
-          style={{ cursor: 'pointer', color: '#0066cc' }}
-        >
-          회원가입
-        </span>
+        아직 계정이 없으신가요?&nbsp;&nbsp;
+        <span onClick={onSwitch}>회원가입</span>
       </p>
     </div>
   );
