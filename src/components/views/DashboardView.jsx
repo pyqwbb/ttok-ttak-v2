@@ -62,7 +62,7 @@ export default function DashboardView() {
                 <p className="subtitle">카테고리 별 수입/지출</p>
                 <h2 className="title">
                   {store.topCountCategory
-                    ? `${store.topCountCategory.name}에 가장 자주 지출하고 있어요`
+                    ? `${store.topCountCategory.name}에 가장 많이 지출하고 있어요`
                     : '이번 달 지출 내역이 없어요'}
                 </h2>
               </div>

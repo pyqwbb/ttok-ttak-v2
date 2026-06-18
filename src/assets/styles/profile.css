@@ -1,4 +1,3 @@
-/* Profile Styles */
 .profile-page {
   width: 100%;
   padding: 2rem;
@@ -26,6 +25,7 @@
   width: 80px;
   height: 80px;
   border-radius: 50%;
+  object-fit: contain;
 }
 
 .profile-heading {
@@ -69,21 +69,45 @@
   margin-bottom: 24px;
 }
 
-.radio-group {
-  display: flex;
-  gap: 16px;
+/* 💡 [신규] 프로필 캐릭터 그리드 선택창 스타일링 추가 */
+.profile-selector-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 4px;
 }
 
-.radio-item {
+.profile-option-btn {
+  background: #f5f7f8;
+  border: 2px solid transparent;
+  border-radius: 50%;
+  padding: 8px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  aspect-ratio: 1;
   display: flex;
   align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  font-size: 14px;
+  justify-content: center;
+  outline: none;
 }
 
-.radio-item input[type='radio'] {
-  cursor: pointer;
+.profile-option-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.profile-option-btn:hover {
+  background: #eef1f2;
+  transform: translateY(-1px);
+}
+
+/* 💡 [신규] 캐릭터 버튼 선택(Selected) 시 똑딱 포인트 컬러 하이라이트 효과 */
+.profile-option-btn.selected {
+  background: #ffffff;
+  border-color: #67ea76;
+  box-shadow: 0 4px 12px rgba(103, 234, 118, 0.35);
+  transform: scale(1.05);
 }
 
 .btn-group {
@@ -100,6 +124,7 @@
   max-height: 0;
   opacity: 0;
   pointer-events: none;
+  display: none; /* 애니메이션 튀는 현상 방지를 위해 확실히 가려줍니다 */
 }
 
 .mode-section.active {
@@ -121,8 +146,7 @@
 }
 
 .field input[type='text'],
-.field input[type='email'],
-.field select {
+.field input[type='email'] {
   padding: 8px 10px;
   border: 1px solid #e6e6e6;
   border-radius: 8px;
@@ -133,8 +157,7 @@
     border-color 180ms ease;
 }
 
-.field input:focus,
-.field select:focus {
+.field input:focus {
   border-color: #bcdff6;
   box-shadow: 0 0 0 4px rgba(188, 223, 246, 0.35);
 }
@@ -175,6 +198,13 @@
   padding: 10px 14px;
   border-radius: 8px;
   cursor: pointer;
+  font-weight: 600;
+  color: #565c5c;
+  transition: background 0.2s;
+}
+
+.btn-cancel:hover {
+  background: #eef1f2;
 }
 
 .logout-wrapper {

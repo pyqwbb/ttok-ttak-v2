@@ -1,29 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUserStore } from '@/stores/userStore';
 import CompleteModal from '@/components/common/CompleteModal';
-import profileIcon from '@/assets/icons/profile.svg';
+import { PROFILE_IMAGES } from '@/utils/profileImages';
 import '@/assets/styles/profile.css';
 
 export default function ProfileView() {
   const navigate = useNavigate();
-
   const userStore = useUserStore();
+
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [showCompleteModal, setShowCompleteModal] = useState(false);
 
-  const [form, setForm] = useState({
-    nickname: userStore.user?.nickname || '',
-    email: userStore.user?.email || '',
-  });
-
   const userInfo = userStore.user || {};
 
+  // 💡 form 초기 값에 profile_img 상태 추가 연동
+  const [form, setForm] = useState({
+    nickname: userInfo.nickname || '',
+    email: userInfo.email || '',
+    profile_img: userInfo.profile_img || 'default_1.svg',
+  });
+
+  // 유저 전역 정보가 초기 세팅되거나 외부에서 새로고침될 때 폼 상태 동기화
+  useEffect(() => {
+    if (userStore.user) {
+      setForm({
+        nickname: userStore.user.nickname || '',
+        email: userStore.user.email || '',
+        profile_img: userStore.user.profile_img || 'default_1.svg',
+      });
+    }
+  }, [userStore.user]);
+
   const handleLogout = () => {
-    // 필요 시 사용자 정보 초기화
-    // userStore.logout?.();
     localStorage.removeItem('userId');
     navigate('/');
   };
@@ -33,16 +44,17 @@ export default function ProfileView() {
   };
 
   const handleCancel = () => {
+    // 💡 취소 시 원본 보호용 복사본 롤백 처리
     setForm({
       nickname: userInfo.nickname || '',
       email: userInfo.email || '',
+      profile_img: userInfo.profile_img || 'default_1.svg',
     });
     setErrors({});
     setIsEditing(false);
   };
 
   const handleSave = async () => {
-    // 유효성 검사
     const newErrors = {};
     if (
       !form.nickname ||
@@ -62,10 +74,11 @@ export default function ProfileView() {
 
     setIsLoading(true);
     try {
+      // 💡 수정한 닉네임, 이메일, 선택한 프로필 파일명 객체를 통째로 전송
       await userStore.updateUser(userInfo.id, form);
       setIsEditing(false);
       setErrors({});
-      setShowCompleteModal(true); // 저장 완료 모달 표시
+      setShowCompleteModal(true);
     } catch (error) {
       console.error('Failed to save profile:', error);
     } finally {
@@ -76,14 +89,22 @@ export default function ProfileView() {
   return (
     <div className="profile-page">
       <div className={`profile-card ${isEditing ? 'editing' : ''}`}>
+        {/* 상단 프로필 이미지 영역: form 상태를 바라보므로 변경사항이 실시간 프리뷰됩니다. */}
         <div className="profile-avatar">
-          <img src={profileIcon} alt="프로필" />
+          <img
+            src={
+              PROFILE_IMAGES[form.profile_img] ||
+              PROFILE_IMAGES['default_1.svg']
+            }
+            alt="프로필"
+          />
         </div>
 
         <h2 className="profile-heading">
           {isEditing ? '프로필 수정' : '내 프로필'}
         </h2>
 
+        {/* ==================== 1. 조회 모드 (View Mode) ==================== */}
         <div
           className={`mode-section view-mode ${isEditing ? 'inactive' : 'active'}`}
           aria-hidden={isEditing}
@@ -104,11 +125,29 @@ export default function ProfileView() {
           </button>
         </div>
 
+        {/* ==================== 2. 수정 모드 (Edit Mode) ==================== */}
         <div
           className={`mode-section edit-mode ${isEditing ? 'active' : 'inactive'}`}
           aria-hidden={!isEditing}
         >
           <div className="form">
+            {/* 💡 프로필 캐릭터 선택 그리드 추가 구현 */}
+            <div className="field">
+              <label>프로필 캐릭터 선택</label>
+              <div className="profile-selector-grid">
+                {Object.keys(PROFILE_IMAGES).map((fileName) => (
+                  <button
+                    key={fileName}
+                    type="button"
+                    className={`profile-option-btn ${form.profile_img === fileName ? 'selected' : ''}`}
+                    onClick={() => setForm({ ...form, profile_img: fileName })}
+                  >
+                    <img src={PROFILE_IMAGES[fileName]} alt="캐릭터 인덱스" />
+                  </button>
+                ))}
+              </div>
+            </div>
+
             <div className="field">
               <label>닉네임</label>
               <input

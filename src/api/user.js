@@ -13,9 +13,9 @@ export const userApi = {
     return axios.post(BASEURL, userData);
   },
 
-  // 유저 수정
+  // 유저 수정 (💡 put에서 patch로 변경하여 데이터 유실 방지)
   updateUser(id, userData) {
-    return axios.put(`${BASEURL}/${id}`, userData);
+    return axios.patch(`${BASEURL}/${id}`, userData);
   },
 
   // 유저 삭제

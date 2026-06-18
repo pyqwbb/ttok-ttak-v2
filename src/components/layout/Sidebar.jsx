@@ -7,7 +7,7 @@ import BadgeGrid from '@/components/gamification/BadgeGrid';
 import TransactionModal from '@/components/transaction/TransactionModal';
 import ReactionModal from '@/components/gamification/ReactionModal';
 import logo from '@/assets/icons/logo-signiture.svg';
-import profileIcon from '@/assets/icons/profile.svg';
+import { getProfileImage } from '@/utils/profileImages';
 import coinIcon from '@/assets/icons/money.svg';
 import '@/assets/styles/sidebar.css';
 
@@ -132,7 +132,10 @@ export default function Layout() {
         </div>
 
         <div className="user-profile">
-          <img src={profileIcon} alt="프로필 아이콘" />
+          <img
+            src={getProfileImage(userStore.user?.profile_img)}
+            alt="유저 프로필"
+          />
           <p className="user-name">
             {userStore.user?.nickname || '사용자'}님의 가계부
           </p>
