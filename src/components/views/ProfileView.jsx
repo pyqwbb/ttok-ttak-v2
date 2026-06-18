@@ -5,13 +5,6 @@ import CompleteModal from '@/components/common/CompleteModal';
 import profileIcon from '@/assets/icons/profile.svg';
 import '@/assets/styles/profile.css';
 
-const ageOptions = ['10대', '20대', '30대', '40대', '50대', '60대 이상'];
-
-const genderOptions = [
-  { value: 'M', label: '남성' },
-  { value: 'F', label: '여성' },
-];
-
 export default function ProfileView() {
   const navigate = useNavigate();
 
@@ -24,13 +17,9 @@ export default function ProfileView() {
   const [form, setForm] = useState({
     nickname: userStore.user?.nickname || '',
     email: userStore.user?.email || '',
-    age: userStore.user?.age || '',
-    gender: userStore.user?.gender || '',
   });
 
   const userInfo = userStore.user || {};
-  const genderLabel =
-    genderOptions.find((g) => g.value === userInfo.gender)?.label || '미선택';
 
   const handleLogout = () => {
     // 필요 시 사용자 정보 초기화
@@ -47,8 +36,6 @@ export default function ProfileView() {
     setForm({
       nickname: userInfo.nickname || '',
       email: userInfo.email || '',
-      age: userInfo.age || '',
-      gender: userInfo.gender || '',
     });
     setErrors({});
     setIsEditing(false);
@@ -110,14 +97,6 @@ export default function ProfileView() {
               <span className="info-label">이메일</span>
               <span className="info-value">{userInfo.email}</span>
             </div>
-            <div className="info-item">
-              <span className="info-label">연령대</span>
-              <span className="info-value">{userInfo.age}</span>
-            </div>
-            <div className="info-item">
-              <span className="info-label">성별</span>
-              <span className="info-value">{genderLabel}</span>
-            </div>
           </div>
 
           <button className="btn-primary" onClick={startEdit}>
@@ -151,41 +130,6 @@ export default function ProfileView() {
                 placeholder="이메일을 입력해주세요"
               />
               {errors.email && <p className="error">{errors.email}</p>}
-            </div>
-
-            <div className="field">
-              <label>연령대</label>
-              <select
-                value={form.age}
-                onChange={(e) => setForm({ ...form, age: e.target.value })}
-              >
-                <option value="">선택해주세요</option>
-                {ageOptions.map((age) => (
-                  <option key={age} value={age}>
-                    {age}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="field">
-              <label>성별</label>
-              <div className="radio-group">
-                {genderOptions.map((g) => (
-                  <label key={g.value} className="radio-item">
-                    <input
-                      type="radio"
-                      name="gender"
-                      value={g.value}
-                      checked={form.gender === g.value}
-                      onChange={(e) =>
-                        setForm({ ...form, gender: e.target.value })
-                      }
-                    />
-                    {g.label}
-                  </label>
-                ))}
-              </div>
             </div>
           </div>
 

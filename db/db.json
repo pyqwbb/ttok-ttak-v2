@@ -5,8 +5,8 @@
       "nickname": "똑딱이",
       "email": "ttokttak@example.com",
       "password": "password123",
-      "age": "20대",
-      "gender": "F",
+      "age": null,
+      "gender": null,
       "provider": "local",
       "provider_id": null,
       "created_at": "2026-06-01T00:00:00Z"
@@ -16,8 +16,8 @@
       "nickname": "절약왕",
       "email": "saveking@test.com",
       "password": "password123",
-      "age": 30,
-      "gender": "M",
+      "age": null,
+      "gender": null,
       "provider": "local",
       "provider_id": null,
       "created_at": "2026-06-01T00:00:00Z"
