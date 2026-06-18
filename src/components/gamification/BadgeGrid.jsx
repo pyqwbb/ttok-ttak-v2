@@ -19,31 +19,17 @@ export default function BadgeGrid({ monthlyTopCountCategories = [] }) {
     return result;
   }, [monthlyTopCountCategories]);
 
-  const getBadgeIndex = (row, col) => (row - 1) * 3 + (col - 1);
-  const getBadgeEmoji = (row, col) =>
-    badges[getBadgeIndex(row, col)]?.emoji ?? null;
-  const getBadgeTitle = (row, col) =>
-    badges[getBadgeIndex(row, col)]?.title ?? '';
-
   return (
     <div className="user-badge">
       <p>획득한 뱃지</p>
       <div className="badge-grid">
-        {[1, 2].map((row) => (
-          <div key={row} className="grid-row">
-            {[1, 2, 3].map((col) => (
-              <div
-                key={`${row}-${col}`}
-                className="badge-item"
-                title={getBadgeTitle(row, col)}
-              >
-                {getBadgeEmoji(row, col) ? (
-                  <span className="badge-emoji">{getBadgeEmoji(row, col)}</span>
-                ) : (
-                  <img src={placeholder} alt="뱃지" />
-                )}
-              </div>
-            ))}
+        {badges.map((badge, index) => (
+          <div key={index} className="badge-item" title={badge?.title ?? ''}>
+            {badge?.emoji ? (
+              <span className="badge-emoji">{badge.emoji}</span>
+            ) : (
+              <img src={placeholder} alt="뱃지" />
+            )}
           </div>
         ))}
       </div>
