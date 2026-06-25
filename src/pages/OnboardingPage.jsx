@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import AuthModal from '@/components/auth/AuthModal';
 import './onboarding-page.css';
+import ttokttakLogo from '@/assets/icons/ttokttak-logo.svg';
+import moneyIcon from '@/assets/icons/coin-icon.svg';
+import starIcon from '@/assets/icons/star-icon.svg';
 
 const imgEllipse22 =
   'https://www.figma.com/api/mcp/asset/45410fcf-ee0d-43a6-9ad3-2389a0ae3a68';
@@ -15,11 +18,6 @@ export default function OnboardingView() {
   return (
     <div className="onboarding">
       <div className="onboarding-logo-wrapper">
-        <img
-          className="onboarding-logo-bg"
-          src={imgEllipse22}
-          alt="background glow"
-        />
         <div className="onboarding-logo-text">
           똑딱
           <span>ttok ttak</span>
@@ -29,13 +27,21 @@ export default function OnboardingView() {
       <div className="onboarding-hero">
         <img
           className="hero-asset"
-          src={imgGroup24}
+          src={ttokttakLogo}
           alt="ttok ttak illustration"
         />
-        <img className="hero-star hero-star--left" src={imgStar3} alt="star" />
-        <img className="hero-star hero-star--right" src={imgStar3} alt="star" />
-        <div className="hero-badge hero-badge--left">₩</div>
-        <div className="hero-badge hero-badge--right">₩</div>
+        <img className="hero-star hero-star--left" src={starIcon} alt="star" />
+        <img className="hero-star hero-star--right" src={starIcon} alt="star" />
+        <img
+          className="hero-badge hero-badge--left"
+          src={moneyIcon}
+          alt="money"
+        />
+        <img
+          className="hero-badge hero-badge--right"
+          src={moneyIcon}
+          alt="money"
+        />
       </div>
 
       <p className="onboarding-subtitle">똑똑하게 딱 기록하는 가계부</p>

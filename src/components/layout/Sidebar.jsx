@@ -8,7 +8,7 @@ import TransactionModal from '@/components/transaction/TransactionModal';
 import ReactionModal from '@/components/gamification/ReactionModal';
 import logo from '@/assets/icons/logo-signiture.svg';
 import { getProfileImage } from '@/utils/profileImages';
-import coinIcon from '@/assets/icons/money.svg';
+import coinIcon from '@/assets/icons/coin-icon.svg';
 import '@/assets/styles/sidebar.css';
 
 const navItems = [
