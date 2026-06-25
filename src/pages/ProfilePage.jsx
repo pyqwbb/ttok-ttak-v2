@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUserStore } from '@/stores/userStore';
+import BaseModal from '@/components/common/BaseModal';
 import CompleteModal from '@/components/common/CompleteModal';
 import { PROFILE_IMAGES } from '@/utils/profileImages';
 import './profile-page.css';
@@ -13,6 +14,7 @@ export default function ProfileView() {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [showCompleteModal, setShowCompleteModal] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   const userInfo = userStore.user || {};
 
@@ -33,6 +35,10 @@ export default function ProfileView() {
       });
     }
   }, [userStore.user]);
+
+  const handleLogoutClick = () => {
+    setShowLogoutModal(true);
+  };
 
   const handleLogout = () => {
     localStorage.removeItem('userId');
@@ -188,14 +194,13 @@ export default function ProfileView() {
 
         {!isEditing && (
           <div className="logout-wrapper">
-            <button className="btn-logout" onClick={handleLogout}>
+            <button className="btn-logout" onClick={handleLogoutClick}>
               로그아웃
             </button>
           </div>
         )}
       </div>
 
-      {/* 저장 완료 모달 */}
       {showCompleteModal && (
         <CompleteModal
           visible={showCompleteModal}
@@ -204,6 +209,35 @@ export default function ProfileView() {
           description="프로필이 수정됐어요."
           onClose={() => setShowCompleteModal(false)}
         />
+      )}
+
+      {showLogoutModal && (
+        <BaseModal
+          title="로그아웃"
+          onClose={() => setShowLogoutModal(false)}
+          footer={
+            <div className="modal-btn-group">
+              <button
+                className="btn-cancel"
+                onClick={() => setShowLogoutModal(false)}
+              >
+                취소
+              </button>
+
+              <button
+                className="btn-primary"
+                onClick={() => {
+                  setShowLogoutModal(false);
+                  handleLogout();
+                }}
+              >
+                로그아웃
+              </button>
+            </div>
+          }
+        >
+          <p>로그아웃 하시겠습니까?</p>
+        </BaseModal>
       )}
     </div>
   );

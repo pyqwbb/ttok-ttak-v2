@@ -172,6 +172,7 @@
 .btn-primary {
   background-color: #67ea76;
   color: white;
+  width: 100%;
   border: none;
   padding: 10px 14px;
   border-radius: 8px;
@@ -207,13 +208,8 @@
   background: #eef1f2;
 }
 
-.logout-wrapper {
-  margin-top: 32px;
-  padding-top: 20px;
-  border-top: 1px solid #eaeaea;
-}
-
 .btn-logout {
+  margin-top: 24px;
   width: 100%;
   padding: 12px;
   border: 1px solid #e6e9ea;
