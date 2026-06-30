@@ -27,13 +27,11 @@ export default function LoginForm({ onSwitch, onSuccess }) {
     setIsLoading(true);
 
     try {
-      // TODO: 실제 API 연결
-      console.log('로그인 시도:', form);
-
-      // 임시 처리
-      localStorage.setItem('userId', '1');
+      await userStore.login(form); // 토큰 저장 + 유저 정보 조회
       onSuccess?.();
-      navigate('/dashboard');
+      setTimeout(() => {
+        navigate('/dashboard');
+      });
     } catch (e) {
       setErrorMsg(
         e.response?.data?.message || '로그인에 실패했어요. 다시 시도해주세요.',
