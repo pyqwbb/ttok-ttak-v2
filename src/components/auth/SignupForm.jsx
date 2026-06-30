@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import CompleteModal from '@/components/common/CompleteModal';
 import { useUserStore } from '@/stores/userStore';
 
 export default function SignupForm({ onSwitch }) {
@@ -13,6 +14,18 @@ export default function SignupForm({ onSwitch }) {
 
   const [errorMsg, setErrorMsg] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showCompleteModal, setShowCompleteModal] = useState(false);
+
+  useEffect(() => {
+    if (!showCompleteModal) return;
+
+    const timer = setTimeout(() => {
+      setShowCompleteModal(false);
+      onSwitch?.();
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, [showCompleteModal]);
 
   const handleChange = (field) => (e) =>
     setForm((prev) => ({ ...prev, [field]: e.target.value }));
@@ -54,19 +67,16 @@ export default function SignupForm({ onSwitch }) {
   const handleSignup = async () => {
     setErrorMsg('');
     if (!validate()) return;
+    console.log('회원가입 시도', form);
 
     setIsLoading(true);
     try {
-      // TODO: 실제 API 연결
-      console.log('회원가입 시도:', form);
-
-      await userStore.createUser({
+      await userStore.signup({
         email: form.email,
         password: form.password,
         nickname: form.nickname,
       });
-
-      onSwitch?.();
+      setShowCompleteModal(true);
     } catch (e) {
       setErrorMsg(
         e.response?.data?.message ||
@@ -146,6 +156,20 @@ export default function SignupForm({ onSwitch }) {
         이미 계정이 있으신가요?&nbsp;&nbsp;
         <span onClick={onSwitch}>로그인</span>
       </p>
+
+      {showCompleteModal && (
+        <CompleteModal
+          icon="🎉"
+          title="회원가입 완료!"
+          message="로그인 페이지로 이동합니다."
+          onClose={() => {
+            setShowCompleteModal(false);
+            setTimeout(() => {
+              onSwitch?.();
+            }, 200);
+          }}
+        />
+      )}
     </div>
   );
 }

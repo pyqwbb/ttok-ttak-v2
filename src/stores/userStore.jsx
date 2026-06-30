@@ -5,7 +5,8 @@ import {
   useCallback,
   useMemo,
 } from 'react';
-import { userApi } from '../api/user';
+import { userApi } from '../api/userApi';
+import { authApi } from '../api/authApi';
 
 const UserContext = createContext();
 
@@ -14,77 +15,71 @@ export const UserProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const fetchUser = useCallback(async (id) => {
+  // 로그인 여부
+  const isLoggedIn = !!localStorage.getItem('token');
+
+  // 프로필 조회
+  const fetchUser = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await userApi.fetchUser(id);
-      if (response.status === 200) {
-        setUser(response.data);
-        setError(null);
-      } else {
-        setError('유저 조회 실패');
-        alert('유저 조회 실패');
-      }
+      const response = await userApi.fetchUser();
+      setUser(response.data);
+      setError(null);
     } catch (err) {
       setError(err.message);
-      alert('에러발생 :' + err.message);
     } finally {
       setLoading(false);
     }
   }, []);
 
-  const createUser = useCallback(async (userData) => {
+  // 회원가입
+  const signup = useCallback(async (userData) => {
     setLoading(true);
     try {
-      const response = await userApi.createUser(userData);
-      if (response.status === 200 || response.status === 201) {
-        setUser(response.data);
-        setError(null);
-      } else {
-        setError('유저 생성 실패');
-        alert('유저 생성 실패');
-      }
+      await authApi.signup(userData);
+      setError(null);
     } catch (err) {
-      setError(err.message);
-      alert('에러발생 :' + err.message);
+      throw err;
     } finally {
       setLoading(false);
     }
   }, []);
 
-  const updateUser = useCallback(async (id, userData) => {
-    setLoading(true);
-    try {
-      const response = await userApi.updateUser(id, userData);
-      if (response.status === 200 || response.status === 204) {
-        setUser(response.data);
+  // 로그인
+  const login = useCallback(
+    async (form) => {
+      setLoading(true);
+      try {
+        const res = await authApi.login(form);
+        const token = res.data.token;
+        localStorage.setItem('token', token);
         setError(null);
-      } else {
-        setError('유저 수정 실패');
-        alert('유저 수정 실패');
+        // 토큰 저장 후 유저 정보 불러오기
+        await fetchUser();
+      } catch (err) {
+        throw err;
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      setError(err.message);
-      alert('에러발생 :' + err.message);
-    } finally {
-      setLoading(false);
-    }
+    },
+    [fetchUser],
+  );
+
+  // 로그아웃
+  const logout = useCallback(() => {
+    localStorage.removeItem('token');
+    setUser(null);
   }, []);
 
-  const deleteUser = useCallback(async (id) => {
+  // 프로필 수정
+  const updateUser = useCallback(async (userData) => {
     setLoading(true);
     try {
-      const response = await userApi.deleteUser(id);
-      if (response.status === 200 || response.status === 204) {
-        setUser(null);
-        setError(null);
-      } else {
-        setError('유저 삭제 실패');
-        alert('유저 삭제 실패');
-      }
+      const response = await userApi.updateUser(userData);
+      setUser(response.data);
+      setError(null);
     } catch (err) {
-      setError(err.message);
-      alert('에러발생 :' + err.message);
+      throw err;
     } finally {
       setLoading(false);
     }
@@ -95,12 +90,24 @@ export const UserProvider = ({ children }) => {
       user,
       loading,
       error,
+      isLoggedIn,
       fetchUser,
-      createUser,
+      signup,
+      login,
+      logout,
       updateUser,
-      deleteUser,
     }),
-    [user, loading, error, fetchUser, createUser, updateUser, deleteUser],
+    [
+      user,
+      loading,
+      error,
+      isLoggedIn,
+      fetchUser,
+      signup,
+      login,
+      logout,
+      updateUser,
+    ],
   );
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
