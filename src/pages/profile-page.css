@@ -162,6 +162,13 @@
   box-shadow: 0 0 0 4px rgba(188, 223, 246, 0.35);
 }
 
+.field input.input-readonly {
+  background: #f5f7f8;
+  color: #8a9191;
+  cursor: not-allowed;
+  border-color: #e6e6e6;
+}
+
 .error {
   color: #d9534f;
   font-size: 13px;

@@ -68,9 +68,6 @@ export default function ProfileView() {
     ) {
       newErrors.nickname = '닉네임은 2~10글자로 입력해주세요';
     }
-    if (!userData.email || !userData.email.includes('@')) {
-      newErrors.email = '유효한 이메일을 입력해주세요';
-    }
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -172,12 +169,10 @@ export default function ProfileView() {
               <input
                 type="email"
                 value={userData.email}
-                onChange={(e) =>
-                  setUserData({ ...userData, email: e.target.value })
-                }
-                placeholder="이메일을 입력해주세요"
+                disabled
+                readOnly
+                className="input-readonly"
               />
-              {errors.email && <p className="error">{errors.email}</p>}
             </div>
           </div>
 
