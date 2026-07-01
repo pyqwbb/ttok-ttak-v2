@@ -2,7 +2,7 @@ import api from './index';
 
 export const userApi = {
   // 프로필 조회
-  fetchUser() {
+  getUser() {
     return api.get('/api/user');
   },
 

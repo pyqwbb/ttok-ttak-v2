@@ -19,10 +19,10 @@ export const UserProvider = ({ children }) => {
   const isLoggedIn = !!localStorage.getItem('token');
 
   // 프로필 조회
-  const fetchUser = useCallback(async () => {
+  const getUser = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await userApi.fetchUser();
+      const response = await userApi.getUser();
       setUser(response.data);
       setError(null);
     } catch (err) {
@@ -55,14 +55,14 @@ export const UserProvider = ({ children }) => {
         localStorage.setItem('token', token);
         setError(null);
         // 토큰 저장 후 유저 정보 불러오기
-        await fetchUser();
+        await getUser();
       } catch (err) {
         throw err;
       } finally {
         setLoading(false);
       }
     },
-    [fetchUser],
+    [getUser],
   );
 
   // 로그아웃
@@ -91,7 +91,7 @@ export const UserProvider = ({ children }) => {
       loading,
       error,
       isLoggedIn,
-      fetchUser,
+      getUser,
       signup,
       login,
       logout,
@@ -102,7 +102,7 @@ export const UserProvider = ({ children }) => {
       loading,
       error,
       isLoggedIn,
-      fetchUser,
+      getUser,
       signup,
       login,
       logout,

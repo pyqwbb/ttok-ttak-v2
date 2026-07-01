@@ -49,7 +49,7 @@ export default function Layout() {
 
         try {
           if (!userStore.user) {
-            await userStore.fetchUser(uid);
+            await userStore.getUser();
           }
         } catch (error) {
           console.error('Failed to fetch user:', error);
