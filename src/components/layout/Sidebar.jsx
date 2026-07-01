@@ -133,7 +133,7 @@ export default function Layout() {
 
         <div className="user-profile">
           <img
-            src={getProfileImage(userStore.user?.profile_img)}
+            src={getProfileImage(userStore.user?.profileImg)}
             alt="유저 프로필"
           />
           <p className="user-name">

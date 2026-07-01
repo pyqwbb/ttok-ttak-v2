@@ -18,20 +18,19 @@ export default function ProfileView() {
 
   const userInfo = userStore.user || {};
 
-  // 💡 form 초기 값에 profile_img 상태 추가 연동
-  const [form, setForm] = useState({
+  const [userData, setUserData] = useState({
     nickname: userInfo.nickname || '',
     email: userInfo.email || '',
-    profile_img: userInfo.profile_img || 'default_1.svg',
+    profileImg: userInfo.profileImg || 'default_1.svg',
   });
 
   // 유저 전역 정보가 초기 세팅되거나 외부에서 새로고침될 때 폼 상태 동기화
   useEffect(() => {
     if (userStore.user) {
-      setForm({
+      setUserData({
         nickname: userStore.user.nickname || '',
         email: userStore.user.email || '',
-        profile_img: userStore.user.profile_img || 'default_1.svg',
+        profileImg: userStore.user.profileImg || 'default_1.svg',
       });
     }
   }, [userStore.user]);
@@ -41,7 +40,7 @@ export default function ProfileView() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('userId');
+    userStore.logout();
     navigate('/');
   };
 
@@ -51,10 +50,10 @@ export default function ProfileView() {
 
   const handleCancel = () => {
     // 💡 취소 시 원본 보호용 복사본 롤백 처리
-    setForm({
+    setUserData({
       nickname: userInfo.nickname || '',
       email: userInfo.email || '',
-      profile_img: userInfo.profile_img || 'default_1.svg',
+      profileImg: userInfo.profileImg || 'default_1.svg',
     });
     setErrors({});
     setIsEditing(false);
@@ -63,13 +62,13 @@ export default function ProfileView() {
   const handleSave = async () => {
     const newErrors = {};
     if (
-      !form.nickname ||
-      form.nickname.length < 2 ||
-      form.nickname.length > 10
+      !userData.nickname ||
+      userData.nickname.length < 2 ||
+      userData.nickname.length > 10
     ) {
       newErrors.nickname = '닉네임은 2~10글자로 입력해주세요';
     }
-    if (!form.email || !form.email.includes('@')) {
+    if (!userData.email || !userData.email.includes('@')) {
       newErrors.email = '유효한 이메일을 입력해주세요';
     }
 
@@ -80,8 +79,7 @@ export default function ProfileView() {
 
     setIsLoading(true);
     try {
-      // 💡 수정한 닉네임, 이메일, 선택한 프로필 파일명 객체를 통째로 전송
-      await userStore.updateUser(userInfo.id, form);
+      await userStore.updateUser(userData);
       setIsEditing(false);
       setErrors({});
       setShowCompleteModal(true);
@@ -95,11 +93,10 @@ export default function ProfileView() {
   return (
     <div className="profile-page">
       <div className={`profile-card ${isEditing ? 'editing' : ''}`}>
-        {/* 상단 프로필 이미지 영역: form 상태를 바라보므로 변경사항이 실시간 프리뷰됩니다. */}
         <div className="profile-avatar">
           <img
             src={
-              PROFILE_IMAGES[form.profile_img] ||
+              PROFILE_IMAGES[userData.profileImg] ||
               PROFILE_IMAGES['default_1.svg']
             }
             alt="프로필"
@@ -145,8 +142,10 @@ export default function ProfileView() {
                   <button
                     key={fileName}
                     type="button"
-                    className={`profile-option-btn ${form.profile_img === fileName ? 'selected' : ''}`}
-                    onClick={() => setForm({ ...form, profile_img: fileName })}
+                    className={`profile-option-btn ${userData.profileImg === fileName ? 'selected' : ''}`}
+                    onClick={() =>
+                      setUserData({ ...userData, profileImg: fileName })
+                    }
                   >
                     <img src={PROFILE_IMAGES[fileName]} alt="캐릭터 인덱스" />
                   </button>
@@ -158,8 +157,10 @@ export default function ProfileView() {
               <label>닉네임</label>
               <input
                 type="text"
-                value={form.nickname}
-                onChange={(e) => setForm({ ...form, nickname: e.target.value })}
+                value={userData.nickname}
+                onChange={(e) =>
+                  setUserData({ ...userData, nickname: e.target.value })
+                }
                 placeholder="2~10글자로 입력해주세요"
                 maxLength={10}
               />
@@ -170,8 +171,10 @@ export default function ProfileView() {
               <label>이메일</label>
               <input
                 type="email"
-                value={form.email}
-                onChange={(e) => setForm({ ...form, email: e.target.value })}
+                value={userData.email}
+                onChange={(e) =>
+                  setUserData({ ...userData, email: e.target.value })
+                }
                 placeholder="이메일을 입력해주세요"
               />
               {errors.email && <p className="error">{errors.email}</p>}
