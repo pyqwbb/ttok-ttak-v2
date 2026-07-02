@@ -40,12 +40,20 @@ export default function DashboardView() {
     }
   }, [hasLoaded]);
 
-  // 이번 달 지출을 카테고리별로 집계 -> 지출 1위 / 횟수 1위 카테고리 도출
-  const { hasExpenses, topExpenseCategory, topCountCategory } = useMemo(() => {
-    const thisMonth = new Date().toISOString().slice(0, 7);
+  // 선택된 월(currentDate) 기준으로 거래 내역 필터링
+  const monthlyTransactions = useMemo(() => {
     const list = Array.isArray(transactions) ? transactions : [];
-    const monthlyExpenses = list.filter(
-      (t) => t.type === 'expense' && t.date?.startsWith(thisMonth),
+    const monthStr = `${currentDate.getFullYear()}-${String(
+      currentDate.getMonth() + 1,
+    ).padStart(2, '0')}`;
+
+    return list.filter((t) => t.date?.startsWith(monthStr));
+  }, [transactions, currentDate]);
+
+  // 선택된 월의 지출을 카테고리별로 집계 -> 지출 1위 / 횟수 1위 카테고리 도출
+  const { hasExpenses, topExpenseCategory, topCountCategory } = useMemo(() => {
+    const monthlyExpenses = monthlyTransactions.filter(
+      (t) => t.type === 'expense',
     );
 
     const amountMap = {};
@@ -73,7 +81,7 @@ export default function DashboardView() {
       topExpenseCategory: topExpenseCid ? summarize(topExpenseCid) : null,
       topCountCategory: topCountCid ? summarize(topCountCid) : null,
     };
-  }, [transactions, categories]);
+  }, [monthlyTransactions, categories]);
 
   const messages = (monthlySummaryMessages ?? []).filter(
     (m) => String(m.cid) === String(topExpenseCategory?.id),
@@ -98,7 +106,7 @@ export default function DashboardView() {
 
       <div className="dashboard-content">
         <div className="left-section">
-          <SummaryCards transactions={transactions} />
+          <SummaryCards transactions={monthlyTransactions} />
 
           {hasExpenses ? (
             <div className="content">
@@ -113,14 +121,14 @@ export default function DashboardView() {
               <div className="content-main">
                 <div className="content-item">
                   <BubbleChart
-                    transactions={transactions}
+                    transactions={monthlyTransactions}
                     categories={categories}
                   />
                 </div>
 
                 <div className="content-item">
                   <ProgressBar
-                    transactions={transactions}
+                    transactions={monthlyTransactions}
                     categories={categories}
                   />
                 </div>

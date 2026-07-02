@@ -2,25 +2,19 @@ import { useMemo } from 'react';
 import './summary-cards.css';
 
 export default function SummaryCards({ transactions }) {
-  const currentMonth = new Date().toISOString().slice(0, 7);
-
-  // 이번 달 거래만 필터링
-  const monthlyTransactions = useMemo(() => {
-    const list = Array.isArray(transactions) ? transactions : [];
-    return list.filter((t) => t.date?.startsWith(currentMonth));
-  }, [transactions, currentMonth]);
-
   const totalExpense = useMemo(() => {
-    return monthlyTransactions
+    const list = Array.isArray(transactions) ? transactions : [];
+    return list
       .filter((t) => t.type === 'expense')
       .reduce((sum, t) => sum + t.amount, 0);
-  }, [monthlyTransactions]);
+  }, [transactions]);
 
   const totalIncome = useMemo(() => {
-    return monthlyTransactions
+    const list = Array.isArray(transactions) ? transactions : [];
+    return list
       .filter((t) => t.type === 'income')
       .reduce((sum, t) => sum + t.amount, 0);
-  }, [monthlyTransactions]);
+  }, [transactions]);
 
   const netIncome = totalIncome - totalExpense;
 

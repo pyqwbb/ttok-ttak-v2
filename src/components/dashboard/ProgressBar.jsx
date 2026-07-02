@@ -16,16 +16,13 @@ export default function ProgressBar({ transactions, categories }) {
 
   // 이번 달 지출 top 5 카테고리 + 예산(goalAmount) 매칭
   const chartData = useMemo(() => {
-    const currentMonth = new Date().toISOString().slice(0, 7);
     const list = Array.isArray(transactions) ? transactions : [];
     const budgets = Array.isArray(categoryBudget) ? categoryBudget : [];
 
-    const monthlyExpenses = list.filter(
-      (t) => t.type === 'expense' && t.date?.startsWith(currentMonth),
-    );
+    const expenses = list.filter((t) => t.type === 'expense');
 
     const amountMap = {};
-    monthlyExpenses.forEach((t) => {
+    expenses.forEach((t) => {
       const key = String(t.cid);
       amountMap[key] = (amountMap[key] ?? 0) + t.amount;
     });
