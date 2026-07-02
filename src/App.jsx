@@ -6,7 +6,6 @@ import { CategoryProvider } from './stores/categoryStore';
 import { TransactionProvider } from './stores/transactionStore';
 import { CategoryBudgetProvider } from './stores/categoryBudgetStore';
 import { GamificationProvider } from './stores/gamificationStore';
-import { ReactionProvider } from './stores/reactionStore';
 import router from './router';
 
 function App() {
@@ -17,9 +16,7 @@ function App() {
           <LegacyCategoryProvider>
             <TransactionProvider>
               <CategoryProvider>
-                <ReactionProvider>
-                  <RouterProvider router={router} />
-                </ReactionProvider>
+                <RouterProvider router={router} />
               </CategoryProvider>
             </TransactionProvider>
           </LegacyCategoryProvider>
