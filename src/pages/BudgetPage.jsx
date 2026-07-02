@@ -1,35 +1,36 @@
 import { useState, useEffect } from 'react';
 import { useCategoryStore } from '@/stores/categoryStore';
 import { useUserStore } from '@/stores/userStore';
+import { useCategoryBudgetStore } from '@/stores/categoryBudgetStore';
 import BudgetModal from '@/components/budget/BudgetModal';
 import ConfirmModal from '@/components/common/ConfirmModal';
 import './budget-page.css';
 
 export default function BudgetView() {
-  const categoryStore = useCategoryStore();
+  const { categories, getExpenseCategories } = useCategoryStore();
   const userStore = useUserStore();
+  const {
+    categoryBudget,
+    loading,
+    error,
+    getCategoryBudget,
+    deleteCategoryBudget,
+  } = useCategoryBudgetStore();
 
-  const [budgets, setBudgets] = useState([]); // 설정된 예산 목록
   const [showBudgetModal, setShowBudgetModal] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [selectedBudget, setSelectedBudget] = useState(null); // null이면 등록, 값 있으면 수정
+  const [deleteErrorMsg, setDeleteErrorMsg] = useState('');
 
   const uid = userStore.user?.id ?? localStorage.getItem('userId');
 
-  // 예산 목록 불러오기
-  const fetchBudgets = async () => {
-    try {
-      // 2주차에 실제 API 연결 예정
-      // const { data } = await api.get('/category-budget', { params: { uid } })
-      // setBudgets(data)
-      console.log('예산 목록 조회:', uid);
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  // 스토어에 담긴 예산 목록
+  const categoryBudgets = Array.isArray(categoryBudget) ? categoryBudget : [];
 
+  // 카테고리 + 예산 목록 불러오기
   useEffect(() => {
-    fetchBudgets();
+    getExpenseCategories();
+    getCategoryBudget();
   }, [uid]);
 
   // 등록 모달 열기
@@ -46,21 +47,13 @@ export default function BudgetView() {
 
   // 삭제 확인 모달 열기
   const openDeleteConfirm = (budget) => {
+    setDeleteErrorMsg('');
     setSelectedBudget(budget);
     setShowConfirmModal(true);
   };
 
-  // 저장 완료 후 처리
-  const handleSubmit = (savedBudget) => {
-    if (selectedBudget) {
-      // 수정: 기존 항목 교체
-      setBudgets((prev) =>
-        prev.map((b) => (b.id === savedBudget.id ? savedBudget : b)),
-      );
-    } else {
-      // 등록: 목록에 추가
-      setBudgets((prev) => [...prev, savedBudget]);
-    }
+  // 등록/수정은 모달 내부에서 API 호출까지 끝냄 -> 모달만 닫으면 됨
+  const handleSubmit = () => {
     setShowBudgetModal(false);
     setSelectedBudget(null);
   };
@@ -68,24 +61,20 @@ export default function BudgetView() {
   // 삭제 처리
   const handleDelete = async () => {
     try {
-      // 2주차에 실제 API 연결 예정
-      // await api.delete(`/category-budget/${selectedBudget.id}`)
-      console.log('삭제:', selectedBudget.id);
-
-      setBudgets((prev) => prev.filter((b) => b.id !== selectedBudget.id));
+      await deleteCategoryBudget(selectedBudget.id);
       setShowConfirmModal(false);
       setSelectedBudget(null);
     } catch (e) {
-      console.error(e);
+      setDeleteErrorMsg('삭제 중 오류가 발생했어요. 다시 시도해주세요.');
     }
   };
 
   // 예산 설정된 카테고리 ID 목록
-  const setBudgetCids = budgets.map((b) => String(b.cid));
+  const setBudgetCids = categoryBudgets.map((b) => String(b.cid));
 
   // 카테고리 정보 가져오기
   const getCategory = (cid) =>
-    categoryStore.categories.find((c) => String(c.id) === String(cid));
+    categories.find((c) => String(c.id) === String(cid));
 
   return (
     <div className="budget-page">
@@ -97,10 +86,17 @@ export default function BudgetView() {
         </button>
       </div>
 
+      {/* 로딩 */}
+      {loading && categoryBudgets.length === 0 && (
+        <div className="budget-empty">
+          <p>불러오는 중...</p>
+        </div>
+      )}
+
       {/* 예산 목록 */}
-      {budgets.length > 0 ? (
+      {!loading && categoryBudgets.length > 0 && (
         <div className="budget-list">
-          {budgets.map((budget) => {
+          {categoryBudgets.map((budget) => {
             const category = getCategory(budget.cid);
             return (
               <div key={budget.id} className="budget-item">
@@ -141,7 +137,10 @@ export default function BudgetView() {
             );
           })}
         </div>
-      ) : (
+      )}
+
+      {/* 빈 상태 */}
+      {!loading && categoryBudgets.length === 0 && (
         <div className="budget-empty">
           <p>💰</p>
           <p>설정된 예산이 없어요</p>
@@ -153,6 +152,9 @@ export default function BudgetView() {
           </button>
         </div>
       )}
+
+      {error && <p className="error">{error}</p>}
+      {deleteErrorMsg && <p className="error">{deleteErrorMsg}</p>}
 
       {/* 예산 등록/수정 모달 */}
       {showBudgetModal && (

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useCategoryStore } from '@/stores/categoryStore';
+import { useLegacyCategoryStore } from '@/stores/legacy/categoryStore';
 import { useUserStore } from '@/stores/userStore';
 import { useReactionStore } from '@/stores/reactionStore';
 import MonthSelector from '@/components/common/MonthSelector';
@@ -10,7 +10,7 @@ import RecentTransactions from '@/components/dashboard/RecentTransactions';
 import './dashboard-page.css';
 
 export default function DashboardView() {
-  const store = useCategoryStore();
+  const store = useLegacyCategoryStore();
   const userStore = useUserStore();
   const reactionStore = useReactionStore();
   const [hasLoaded, setHasLoaded] = useState(false);
