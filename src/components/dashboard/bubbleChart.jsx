@@ -1,8 +1,12 @@
-// src/components/dashboard/BubbleChart.jsx
 import { useState, useRef, useEffect, useMemo } from 'react';
+import { useTransactionStore } from '@/stores/transactionStore';
+import { useCategoryStore } from '@/stores/categoryStore';
 import './bubble-chart.css';
 
-export default function BubbleChart({ chartData, expenseCount }) {
+export default function BubbleChart() {
+  const { transactions, getTransactions } = useTransactionStore();
+  const { categories, getCategories } = useCategoryStore();
+
   const bubbleWrapRef = useRef(null);
   const [bubbles, setBubbles] = useState([]);
   const [tooltip, setTooltip] = useState({
@@ -13,6 +17,57 @@ export default function BubbleChart({ chartData, expenseCount }) {
   });
 
   const svgSize = 300;
+
+  useEffect(() => {
+    getTransactions();
+    getCategories();
+  }, []);
+
+  // 지출 카테고리만 로컬 필터링
+  const expenseCategories = useMemo(
+    () => categories.filter((c) => c.type === 'expense'),
+    [categories],
+  );
+
+  // 이번 달 지출을 카테고리별로 집계 -> chartData + expenseCount 생성
+  const { chartData, expenseCount } = useMemo(() => {
+    const currentMonth = new Date().toISOString().slice(0, 7);
+    const list = Array.isArray(transactions) ? transactions : [];
+
+    const monthlyExpenses = list.filter(
+      (t) => t.type === 'expense' && t.date?.startsWith(currentMonth),
+    );
+
+    const amountMap = {};
+    const countMap = {};
+    monthlyExpenses.forEach((t) => {
+      const key = String(t.cid);
+      amountMap[key] = (amountMap[key] ?? 0) + t.amount;
+      countMap[key] = (countMap[key] ?? 0) + 1;
+    });
+
+    const totalExpense = Object.values(amountMap).reduce(
+      (sum, v) => sum + v,
+      0,
+    );
+
+    const data = Object.keys(amountMap)
+      .map((cid) => {
+        const category = expenseCategories.find((c) => String(c.id) === cid);
+        const amount = amountMap[cid];
+        return {
+          id: cid,
+          name: category?.name ?? '알 수 없음',
+          img: category?.img ?? '❓',
+          color: category?.color ?? '#cccccc',
+          amount,
+          ratio: totalExpense ? Math.round((amount / totalExpense) * 100) : 0,
+        };
+      })
+      .sort((a, b) => b.amount - a.amount);
+
+    return { chartData: data, expenseCount: countMap };
+  }, [transactions, expenseCategories]);
 
   // 겹침 방지 버블 배치 알고리즘
   const placeBubbles = (data) => {
@@ -49,9 +104,12 @@ export default function BubbleChart({ chartData, expenseCount }) {
 
   // chartData 바뀔 때마다 버블 재배치
   useEffect(() => {
-    if (chartData?.length) {
+    if (chartData.length) {
       setBubbles(placeBubbles(chartData));
+    } else {
+      setBubbles([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chartData]);
 
   // 툴팁 표시
@@ -64,7 +122,6 @@ export default function BubbleChart({ chartData, expenseCount }) {
 
     setTooltip({
       visible: true,
-      // 오른쪽 밖으로 나가면 왼쪽에 표시
       x: x + 140 > rect.width ? x - 145 : x + 12,
       y: y - 10,
       data: bubble,
@@ -89,7 +146,7 @@ export default function BubbleChart({ chartData, expenseCount }) {
     setTooltip((prev) => ({ ...prev, visible: false }));
   };
 
-  if (!chartData?.length) return null;
+  if (!chartData.length) return null;
 
   return (
     <div className="bubble-wrap" ref={bubbleWrapRef}>
@@ -132,7 +189,6 @@ export default function BubbleChart({ chartData, expenseCount }) {
             onMouseMove={moveTooltip}
             onMouseLeave={hideTooltip}
           >
-            {/* 버블 원 */}
             <circle
               cx={bubble.cx}
               cy={bubble.cy}
@@ -146,7 +202,6 @@ export default function BubbleChart({ chartData, expenseCount }) {
               }}
             />
 
-            {/* 비율 텍스트 */}
             <text
               x={bubble.cx}
               y={bubble.cy}

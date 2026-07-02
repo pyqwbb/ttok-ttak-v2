@@ -1,45 +1,88 @@
-import { useState, useEffect } from 'react';
-import { useLegacyCategoryStore } from '@/stores/legacy/categoryStore';
+import { useState, useEffect, useMemo } from 'react';
+import { useTransactionStore } from '@/stores/transactionStore';
+import { useCategoryStore } from '@/stores/categoryStore';
 import { useUserStore } from '@/stores/userStore';
 import { useReactionStore } from '@/stores/reactionStore';
 import MonthSelector from '@/components/common/MonthSelector';
 import SummaryCards from '@/components/dashboard/SummaryCards';
-import BubbleChart from '@/components/dashboard/bubbleChart';
+import BubbleChart from '@/components/dashboard/BubbleChart';
 import ProgressBar from '@/components/dashboard/ProgressBar';
 import RecentTransactions from '@/components/dashboard/RecentTransactions';
 import './dashboard-page.css';
 
 export default function DashboardView() {
-  const store = useLegacyCategoryStore();
+  const {
+    transactions,
+    loading: transactionLoading,
+    getTransactions,
+  } = useTransactionStore();
+  const {
+    categories,
+    loading: categoryLoading,
+    getCategories,
+  } = useCategoryStore();
   const userStore = useUserStore();
-  const reactionStore = useReactionStore();
+  const { monthlySummaryMessages, fetchMonthlySummaryMessages } =
+    useReactionStore();
+
   const [hasLoaded, setHasLoaded] = useState(false);
   const [currentDate, setCurrentDate] = useState(new Date());
 
-  const messages = reactionStore.monthlySummaryMessages.filter(
-    (m) => String(m.cid) === String(store.topExpenseCategory?.id),
+  useEffect(() => {
+    const uid = userStore.user?.id || localStorage.getItem('userId');
+
+    if (!hasLoaded && uid) {
+      getTransactions();
+      getCategories();
+      fetchMonthlySummaryMessages();
+      setHasLoaded(true);
+    }
+  }, [hasLoaded]);
+
+  // 이번 달 지출을 카테고리별로 집계 -> 지출 1위 / 횟수 1위 카테고리 도출
+  const { hasExpenses, topExpenseCategory, topCountCategory } = useMemo(() => {
+    const thisMonth = new Date().toISOString().slice(0, 7);
+    const list = Array.isArray(transactions) ? transactions : [];
+    const monthlyExpenses = list.filter(
+      (t) => t.type === 'expense' && t.date?.startsWith(thisMonth),
+    );
+
+    const amountMap = {};
+    const countMap = {};
+    monthlyExpenses.forEach((t) => {
+      const key = String(t.cid);
+      amountMap[key] = (amountMap[key] ?? 0) + t.amount;
+      countMap[key] = (countMap[key] ?? 0) + 1;
+    });
+
+    const summarize = (cid) => ({
+      id: cid,
+      name: categories.find((c) => String(c.id) === cid)?.name ?? '알 수 없음',
+    });
+
+    const topExpenseCid = Object.keys(amountMap).sort(
+      (a, b) => amountMap[b] - amountMap[a],
+    )[0];
+    const topCountCid = Object.keys(countMap).sort(
+      (a, b) => countMap[b] - countMap[a],
+    )[0];
+
+    return {
+      hasExpenses: monthlyExpenses.length > 0,
+      topExpenseCategory: topExpenseCid ? summarize(topExpenseCid) : null,
+      topCountCategory: topCountCid ? summarize(topCountCid) : null,
+    };
+  }, [transactions, categories]);
+
+  const messages = (monthlySummaryMessages ?? []).filter(
+    (m) => String(m.cid) === String(topExpenseCategory?.id),
   );
 
   const summaryMessage =
     messages[Math.floor(Math.random() * messages.length)]?.message ??
     '이번 달 소비 패턴을 분석 중이에요.';
 
-  const recentBudgets = store.budgets
-    .slice()
-    .sort((a, b) => b.date.localeCompare(a.date))
-    .slice(0, 5);
-
-  useEffect(() => {
-    const uid = userStore.user?.id || localStorage.getItem('userId');
-
-    if (!hasLoaded && uid && !store.isLoading) {
-      store.fetchAll(uid);
-      reactionStore.fetchMonthlySummaryMessages();
-      setHasLoaded(true);
-    }
-  }, [hasLoaded]);
-
-  if (store.isLoading) {
+  if (transactionLoading || categoryLoading) {
     return <div className="loading">로딩중...</div>;
   }
 
@@ -56,26 +99,23 @@ export default function DashboardView() {
         <div className="left-section">
           <SummaryCards />
 
-          {store.chartData.length > 0 ? (
+          {hasExpenses ? (
             <div className="content">
               <div>
                 <p className="subtitle">카테고리 별 수입/지출</p>
                 <h2 className="title">
-                  {store.topCountCategory
-                    ? `${store.topCountCategory.name}에 가장 많이 지출하고 있어요`
+                  {topCountCategory
+                    ? `${topCountCategory.name}에 가장 많이 지출하고 있어요`
                     : '이번 달 지출 내역이 없어요'}
                 </h2>
               </div>
               <div className="content-main">
                 <div className="content-item">
-                  <BubbleChart
-                    chartData={store.chartData}
-                    expenseCount={store.expenseCountByCategory}
-                  />
+                  <BubbleChart />
                 </div>
 
                 <div className="content-item">
-                  <ProgressBar chartData={store.chartData} />
+                  <ProgressBar />
                 </div>
               </div>
             </div>
@@ -88,10 +128,7 @@ export default function DashboardView() {
         </div>
 
         <div className="right-section">
-          <RecentTransactions
-            transactions={recentBudgets}
-            categories={store.categories}
-          />
+          <RecentTransactions limit={5} />
         </div>
       </div>
     </div>
