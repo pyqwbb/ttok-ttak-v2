@@ -28,6 +28,7 @@ export default function DashboardView() {
   const [hasLoaded, setHasLoaded] = useState(false);
   const [currentDate, setCurrentDate] = useState(new Date());
 
+  // 데이터 fetch는 여기서 한 번만 수행 (자식 컴포넌트는 props로만 받음)
   useEffect(() => {
     const uid = userStore.user?.id || localStorage.getItem('userId');
 
@@ -97,7 +98,7 @@ export default function DashboardView() {
 
       <div className="dashboard-content">
         <div className="left-section">
-          <SummaryCards />
+          <SummaryCards transactions={transactions} />
 
           {hasExpenses ? (
             <div className="content">
@@ -111,11 +112,17 @@ export default function DashboardView() {
               </div>
               <div className="content-main">
                 <div className="content-item">
-                  <BubbleChart />
+                  <BubbleChart
+                    transactions={transactions}
+                    categories={categories}
+                  />
                 </div>
 
                 <div className="content-item">
-                  <ProgressBar />
+                  <ProgressBar
+                    transactions={transactions}
+                    categories={categories}
+                  />
                 </div>
               </div>
             </div>

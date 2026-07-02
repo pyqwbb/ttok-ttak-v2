@@ -1,15 +1,7 @@
-import { useEffect, useMemo } from 'react';
-import { useTransactionStore } from '@/stores/transactionStore';
+import { useMemo } from 'react';
 import './summary-cards.css';
 
-export default function SummaryCards() {
-  const { transactions, loading, error, getTransactions } =
-    useTransactionStore();
-
-  useEffect(() => {
-    getTransactions();
-  }, [getTransactions]);
-
+export default function SummaryCards({ transactions }) {
   const currentMonth = new Date().toISOString().slice(0, 7);
 
   // 이번 달 거래만 필터링
@@ -53,17 +45,8 @@ export default function SummaryCards() {
     },
   ];
 
-  if (loading && transactions.length === 0) {
-    return (
-      <div className="summary-cards">
-        <p>불러오는 중...</p>
-      </div>
-    );
-  }
-
   return (
     <div className="summary-cards">
-      {error && <p className="error">{error}</p>}
       {cards.map((card) => (
         <div className="summary-card" key={card.label}>
           <div className="card-icon">{card.icon}</div>

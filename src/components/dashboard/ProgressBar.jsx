@@ -1,21 +1,14 @@
 import { useEffect, useMemo } from 'react';
-import { useTransactionStore } from '@/stores/transactionStore';
-import { useCategoryStore } from '@/stores/categoryStore';
 import { useCategoryBudgetStore } from '@/stores/categoryBudgetStore';
 import './progress-bar.css';
 
-export default function ProgressBar() {
-  const { transactions, getTransactions } = useTransactionStore();
-  const { categories, getCategories } = useCategoryStore();
+export default function ProgressBar({ transactions, categories }) {
   const { categoryBudget, getCategoryBudget } = useCategoryBudgetStore();
 
   useEffect(() => {
-    getTransactions();
-    getCategories();
     getCategoryBudget();
   }, []);
 
-  // 지출 카테고리만 로컬 필터링
   const expenseCategories = useMemo(
     () => categories.filter((c) => c.type === 'expense'),
     [categories],
@@ -91,12 +84,7 @@ export default function ProgressBar() {
                   }}
                 ></div>
               </div>
-              <span
-                className="progress-pct"
-                style={{
-                  color: item.color,
-                }}
-              >
+              <span className="progress-pct" style={{ color: item.color }}>
                 {Math.min(
                   Math.round((item.amount / item.goalAmount) * 100),
                   100,

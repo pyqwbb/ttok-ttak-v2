@@ -1,12 +1,7 @@
 import { useState, useRef, useEffect, useMemo } from 'react';
-import { useTransactionStore } from '@/stores/transactionStore';
-import { useCategoryStore } from '@/stores/categoryStore';
 import './bubble-chart.css';
 
-export default function BubbleChart() {
-  const { transactions, getTransactions } = useTransactionStore();
-  const { categories, getCategories } = useCategoryStore();
-
+export default function BubbleChart({ transactions, categories }) {
   const bubbleWrapRef = useRef(null);
   const [bubbles, setBubbles] = useState([]);
   const [tooltip, setTooltip] = useState({
@@ -17,11 +12,6 @@ export default function BubbleChart() {
   });
 
   const svgSize = 300;
-
-  useEffect(() => {
-    getTransactions();
-    getCategories();
-  }, []);
 
   // 지출 카테고리만 로컬 필터링
   const expenseCategories = useMemo(
@@ -102,7 +92,6 @@ export default function BubbleChart() {
     return placed;
   };
 
-  // chartData 바뀔 때마다 버블 재배치
   useEffect(() => {
     if (chartData.length) {
       setBubbles(placeBubbles(chartData));
@@ -112,7 +101,6 @@ export default function BubbleChart() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chartData]);
 
-  // 툴팁 표시
   const showTooltip = (e, bubble) => {
     const rect = bubbleWrapRef.current?.getBoundingClientRect();
     if (!rect) return;
@@ -150,7 +138,6 @@ export default function BubbleChart() {
 
   return (
     <div className="bubble-wrap" ref={bubbleWrapRef}>
-      {/* 툴팁 */}
       {tooltip.visible && (
         <div
           className="bubble-tooltip"
