@@ -1,10 +1,17 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useCategoryStore } from '@/stores/categoryStore';
 import BaseModal from '@/components/common/BaseModal';
 import './transaction-modal.css';
 
 export default function TransactionModal({ transaction, onClose, onSubmit }) {
-  const categoryStore = useCategoryStore();
+  const {
+    categories,
+    loading: categoryLoading,
+    error: categoryError,
+    getIncomeCategories,
+    getExpenseCategories,
+  } = useCategoryStore();
+
   const isEditMode = transaction !== null;
 
   const [form, setForm] = useState({
@@ -19,10 +26,17 @@ export default function TransactionModal({ transaction, onClose, onSubmit }) {
   const [errorMsg, setErrorMsg] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const currentCategories = useMemo(
-    () => categoryStore.categories.filter((c) => c.type === form.type),
-    [categoryStore.categories, form.type],
-  );
+  useEffect(() => {
+    if (form.type === 'income') {
+      getIncomeCategories();
+    } else {
+      getExpenseCategories();
+    }
+  }, [form.type, getIncomeCategories, getExpenseCategories]);
+
+  const handleTypeChange = (type) => {
+    setForm({ ...form, type, cid: '' });
+  };
 
   const handleSubmit = async () => {
     setErrorMsg('');
@@ -82,13 +96,13 @@ export default function TransactionModal({ transaction, onClose, onSubmit }) {
         <div className="type-toggle">
           <button
             className={`type-btn ${form.type === 'expense' ? 'active' : ''}`}
-            onClick={() => setForm({ ...form, type: 'expense', cid: '' })}
+            onClick={() => handleTypeChange('expense')}
           >
             지출
           </button>
           <button
             className={`type-btn ${form.type === 'income' ? 'active' : ''}`}
-            onClick={() => setForm({ ...form, type: 'income', cid: '' })}
+            onClick={() => handleTypeChange('income')}
           >
             수입
           </button>
@@ -132,7 +146,7 @@ export default function TransactionModal({ transaction, onClose, onSubmit }) {
             onChange={(e) => setForm({ ...form, cid: e.target.value })}
           >
             <option value="">카테고리를 선택해주세요</option>
-            {currentCategories.map((cat) => (
+            {categories.map((cat) => (
               <option key={cat.id} value={cat.id}>
                 {cat.img} {cat.name}
               </option>
