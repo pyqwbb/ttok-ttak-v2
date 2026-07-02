@@ -6,14 +6,27 @@ export default function BadgeGrid({ monthlyTopCountCategories = [] }) {
   const badges = useMemo(() => {
     const result = Array(6).fill(null);
 
-    monthlyTopCountCategories.slice(0, 6).forEach((data, index) => {
-      if (data.category) {
-        const [year, month] = data.month.split('-');
-        result[index] = {
-          emoji: data.category.img,
-          title: `${year.slice(-2)}년 ${parseInt(month)}월 지출 빈도가 높은 카테고리: ${data.category.name} (${data.count}회)`,
-        };
+    // month별로 그룹핑 (동률 count가 여러 카테고리로 나뉠 수 있음)
+    const byMonth = new Map();
+    monthlyTopCountCategories.forEach((data) => {
+      if (!byMonth.has(data.month)) {
+        byMonth.set(data.month, []);
       }
+      byMonth.get(data.month).push(data);
+    });
+
+    // month 최신순 정렬 후, 동률이면 그 중 랜덤 하나만 뱃지로 채택
+    const months = [...byMonth.keys()].sort((a, b) => (a < b ? 1 : -1));
+
+    months.slice(0, 6).forEach((month, index) => {
+      const candidates = byMonth.get(month);
+      const picked = candidates[Math.floor(Math.random() * candidates.length)];
+
+      const [year, monthNum] = picked.month.split('-');
+      result[index] = {
+        emoji: picked.categoryImg,
+        title: `${year.slice(-2)}년 ${parseInt(monthNum)}월 지출 빈도가 높은 카테고리: ${picked.categoryName} (${picked.count}회)`,
+      };
     });
 
     return result;

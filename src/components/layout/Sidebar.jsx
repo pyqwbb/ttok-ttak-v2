@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { useLegacyCategoryStore } from '@/stores/legacy/categoryStore';
 import { useUserStore } from '@/stores/userStore';
-import { useReactionStore } from '@/stores/reactionStore';
+import { useGamificationStore } from '@/stores/gamificationStore';
 import BadgeGrid from '@/components/gamification/BadgeGrid';
 import TransactionModal from '@/components/transaction/TransactionModal';
 import ReactionModal from '@/components/gamification/ReactionModal';
@@ -22,7 +22,7 @@ export default function Layout() {
   const location = useLocation();
   const userStore = useUserStore();
   const categoryStore = useLegacyCategoryStore();
-  const reactionStore = useReactionStore();
+  const gamificationStore = useGamificationStore();
 
   const [showTransactionModal, setShowTransactionModal] = useState(false);
   const [showReactionModal, setShowReactionModal] = useState(false);
@@ -56,9 +56,15 @@ export default function Layout() {
         }
 
         try {
-          await reactionStore.fetchReactionMessages();
+          await gamificationStore.fetchReactionMessages();
         } catch (error) {
           console.error('Failed to fetch reaction messages:', error);
+        }
+
+        try {
+          await gamificationStore.getBadges();
+        } catch (error) {
+          console.error('Failed to fetch badges:', error);
         }
 
         setHasInitialized(true);
@@ -66,7 +72,7 @@ export default function Layout() {
 
       loadInitialData();
     }
-  }, [hasInitialized]); // 한 번만 실행
+  }, [hasInitialized]);
 
   const handleOpenTransactionModal = () => {
     setShowTransactionModal(true);
@@ -75,9 +81,8 @@ export default function Layout() {
   const handleTransactionSubmit = async (formData) => {
     setShowTransactionModal(false);
 
-    // 비동기로 DOM 업데이트 기다린 후 반응 모달 열기
     setTimeout(() => {
-      const message = reactionStore.resolveMessage(
+      const message = gamificationStore.resolveMessage(
         formData.cid,
         1, // 임시 횟수
         formData.cid,
@@ -118,7 +123,6 @@ export default function Layout() {
       </div>
 
       <div className={`sidebar ${mobileMenuOpen ? 'is-open' : ''}`}>
-        {/* 모바일 닫기 버튼 */}
         <button
           className="sidebar-close"
           onClick={closeMobileMenu}
@@ -141,9 +145,7 @@ export default function Layout() {
           </p>
         </div>
 
-        <BadgeGrid
-          monthlyTopCountCategories={categoryStore.monthlyTopCountCategories}
-        />
+        <BadgeGrid monthlyTopCountCategories={gamificationStore.badges} />
 
         <div className="sidebar-nav">
           {navItems.map((item) => (
