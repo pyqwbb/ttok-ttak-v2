@@ -4,6 +4,7 @@ import { RouterProvider } from 'react-router-dom';
 import { UserProvider } from './stores/userStore';
 import { LegacyCategoryProvider } from './stores/legacy/categoryStore';
 import { CategoryProvider } from './stores/categoryStore';
+import { TransactionProvider } from './stores/transactionStore';
 import { CategoryBudgetProvider } from './stores/categoryBudgetStore';
 import { ReactionProvider } from './stores/reactionStore';
 import router from './router';
@@ -14,11 +15,13 @@ ReactDOM.createRoot(document.getElementById('app')).render(
     <UserProvider>
       <CategoryBudgetProvider>
         <LegacyCategoryProvider>
-          <CategoryProvider>
-            <ReactionProvider>
-              <RouterProvider router={router} />
-            </ReactionProvider>
-          </CategoryProvider>
+          <TransactionProvider>
+            <CategoryProvider>
+              <ReactionProvider>
+                <RouterProvider router={router} />
+              </ReactionProvider>
+            </CategoryProvider>
+          </TransactionProvider>
         </LegacyCategoryProvider>
       </CategoryBudgetProvider>
     </UserProvider>
