@@ -50,7 +50,7 @@ export const GamificationProvider = ({ children }) => {
     (cid, count, categoryName) => {
       // cid + goal_count 정확히 일치하는 메시지 우선
       const exact = reactionMessages.find(
-        (m) => String(m.cid) === String(cid) && Number(m.goal_count) === count,
+        (m) => String(m.cid) === String(cid) && Number(m.goalCount) === count,
       );
       if (exact) return exact.message;
 

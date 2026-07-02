@@ -78,18 +78,8 @@ export default function Layout() {
     setShowTransactionModal(true);
   };
 
-  const handleTransactionSubmit = async (formData) => {
+  const handleTransactionSubmit = () => {
     setShowTransactionModal(false);
-
-    setTimeout(() => {
-      const message = gamificationStore.resolveMessage(
-        formData.cid,
-        1, // 임시 횟수
-        formData.cid,
-      );
-      setReactionMessage(message);
-      setShowReactionModal(true);
-    }, 100);
   };
 
   const toggleMobileMenu = () => {
