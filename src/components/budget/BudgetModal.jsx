@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useUserStore } from '@/stores/userStore';
 import { useCategoryStore } from '@/stores/categoryStore';
+import { useCategoryBudgetStore } from '@/stores/categoryBudgetStore';
 import BaseModal from '@/components/common/BaseModal';
 
 export default function BudgetModal({
@@ -10,7 +11,9 @@ export default function BudgetModal({
   onSubmit,
 }) {
   const userStore = useUserStore();
-  const categoryStore = useCategoryStore();
+  const { categories } = useCategoryStore();
+  const { createCategoryBudget, updateCategoryBudget } =
+    useCategoryBudgetStore();
 
   const isEditMode = budget !== null;
 
@@ -25,12 +28,8 @@ export default function BudgetModal({
   // 등록 모드: 예산 미설정 카테고리만 표시
   // 수정 모드: 현재 카테고리 고정
   const availableCategories = isEditMode
-    ? categoryStore.categories.filter(
-        (c) => String(c.id) === String(budget.cid),
-      )
-    : categoryStore.categories.filter(
-        (c) => !setBudgetCids.includes(String(c.id)),
-      );
+    ? categories.filter((c) => String(c.id) === String(budget.cid))
+    : categories.filter((c) => !setBudgetCids.includes(String(c.id)));
 
   const handleSubmit = async () => {
     setErrorMsg('');
@@ -49,24 +48,22 @@ export default function BudgetModal({
     try {
       const uid = userStore.user?.id ?? localStorage.getItem('userId');
 
-      // 실제 API 연결 예정
-      // if (isEditMode) {
-      //   const { data } = await api.put(`/category-budget/${budget.id}`, { amount: form.amount })
-      //   onSubmit(data)
-      // } else {
-      //   const { data } = await api.post('/category-budget', { uid, ...form })
-      //   onSubmit(data)
-      // }
+      if (isEditMode) {
+        // id는 URL 파라미터로, 나머지는 payload로 분리
+        await updateCategoryBudget(budget.id, {
+          uid,
+          cid: form.cid,
+          amount: Number(form.amount),
+        });
+      } else {
+        await createCategoryBudget({
+          uid,
+          cid: form.cid,
+          amount: Number(form.amount),
+        });
+      }
 
-      // 임시 처리
-      const saved = {
-        id: budget?.id ?? String(Date.now()),
-        uid,
-        cid: form.cid,
-        amount: Number(form.amount),
-      };
-      console.log(isEditMode ? '예산 수정:' : '예산 등록:', saved);
-      onSubmit(saved);
+      onSubmit();
     } catch (e) {
       setErrorMsg('처리 중 오류가 발생했어요. 다시 시도해주세요.');
     } finally {
@@ -80,11 +77,16 @@ export default function BudgetModal({
       onClose={onClose}
       footer={
         <div style={{ display: 'flex', gap: '8px', width: '100%' }}>
-          <button className="btn-cancel" onClick={onClose}>
+          <button
+            className="btn-cancel"
+            style={{ width: '20%' }}
+            onClick={onClose}
+          >
             취소
           </button>
           <button
             className="btn-primary"
+            style={{ width: '80%' }}
             disabled={isLoading}
             onClick={handleSubmit}
           >
@@ -113,11 +115,6 @@ export default function BudgetModal({
               </option>
             ))}
           </select>
-          {isEditMode && (
-            <p className="field-hint">
-              수정 모드에서는 카테고리를 변경할 수 없어요.
-            </p>
-          )}
         </div>
 
         {/* 예산 금액 */}
