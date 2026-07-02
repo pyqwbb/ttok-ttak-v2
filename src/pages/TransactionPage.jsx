@@ -1,17 +1,23 @@
-import React, { useState, useMemo } from 'react';
-import { useLegacyCategoryStore } from '@/stores/legacy/categoryStore';
+import React, { useState, useEffect, useMemo } from 'react';
+import { useCategoryStore } from '@/stores/categoryStore';
+import { useTransactionStore } from '@/stores/transactionStore';
 import TransactionModal from '@/components/transaction/TransactionModal';
 import ConfirmModal from '@/components/common/ConfirmModal';
 import MonthSelector from '@/components/common/MonthSelector';
 import './transaction-page.css';
 
 export default function TransactionView() {
-  const categoryStore = useLegacyCategoryStore();
+  const { categories, getCategories } = useCategoryStore();
+
+  const { transactions, loading, error, getTransactions, deleteTransaction } =
+    useTransactionStore();
+
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedType, setSelectedType] = useState('');
   const [selectedCid, setSelectedCid] = useState('');
   const [editingTransaction, setEditingTransaction] = useState(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(null);
+  const [deleteErrorMsg, setDeleteErrorMsg] = useState('');
 
   const currentYear = currentDate.getFullYear();
   const currentMonth = currentDate.getMonth() + 1;
@@ -22,32 +28,33 @@ export default function TransactionView() {
     { value: 'income', label: '수입' },
   ];
 
+  // 최초 진입 시 전체 카테고리 + 거래 내역 조회
+  useEffect(() => {
+    getCategories();
+    getTransactions();
+  }, []);
+
   // 필터링된 거래 목록
-  const filteredBudgets = useMemo(() => {
+  const filteredTransactions = useMemo(() => {
     const yearStr = String(currentYear);
     const monthStr = String(currentMonth).padStart(2, '0');
+    const list = Array.isArray(transactions) ? transactions : [];
 
-    return categoryStore.budgets.filter((item) => {
-      const dateMatch = item.date.startsWith(`${yearStr}-${monthStr}`);
+    return list.filter((item) => {
+      const dateMatch = item.date?.startsWith(`${yearStr}-${monthStr}`);
       const typeMatch = !selectedType || item.type === selectedType;
-      const cidMatch = !selectedCid || item.cid === parseInt(selectedCid);
+      const cidMatch = !selectedCid || String(item.cid) === String(selectedCid);
 
       return dateMatch && typeMatch && cidMatch;
     });
-  }, [
-    categoryStore.budgets,
-    currentYear,
-    currentMonth,
-    selectedType,
-    selectedCid,
-  ]);
+  }, [transactions, currentYear, currentMonth, selectedType, selectedCid]);
 
   // 합계 계산
   const { totalIncome, totalExpense } = useMemo(() => {
     let income = 0;
     let expense = 0;
 
-    filteredBudgets.forEach((item) => {
+    filteredTransactions.forEach((item) => {
       if (item.type === 'income') {
         income += item.amount;
       } else {
@@ -56,21 +63,17 @@ export default function TransactionView() {
     });
 
     return { totalIncome: income, totalExpense: expense };
-  }, [filteredBudgets]);
+  }, [filteredTransactions]);
 
-  const getCategoryImg = (cid) => {
-    const cat = categoryStore.categories.find((c) => c.id === cid);
-    return cat?.img || '📁';
-  };
+  const getCategory = (cid) =>
+    categories.find((c) => String(c.id) === String(cid));
 
-  const getCategoryName = (cid) => {
-    const cat = categoryStore.categories.find((c) => c.id === cid);
-    return cat?.name || '카테고리';
-  };
+  const getCategoryImg = (cid) => getCategory(cid)?.img || '📁';
+
+  const getCategoryName = (cid) => getCategory(cid)?.name || '카테고리';
 
   const getCategoryColor = (cid) => {
-    // 간단한 색상 매핑 (실제로는 DB에서 가져올 수 있음)
-    return '#FFB6C1';
+    return getCategory(cid)?.color || '#FFB6C1';
   };
 
   const openEditModal = (item) => {
@@ -78,7 +81,17 @@ export default function TransactionView() {
   };
 
   const openDeleteConfirm = (item) => {
+    setDeleteErrorMsg('');
     setShowDeleteConfirm(item);
+  };
+
+  const handleDelete = async () => {
+    try {
+      await deleteTransaction(showDeleteConfirm.id);
+      setShowDeleteConfirm(null);
+    } catch (e) {
+      setDeleteErrorMsg('삭제 중 오류가 발생했어요. 다시 시도해주세요.');
+    }
   };
 
   return (
@@ -108,7 +121,7 @@ export default function TransactionView() {
           className="filter-select"
         >
           <option value="">전체 카테고리</option>
-          {categoryStore.categories.map((cat) => (
+          {categories.map((cat) => (
             <option key={cat.id} value={cat.id}>
               {cat.img} {cat.name}
             </option>
@@ -121,9 +134,15 @@ export default function TransactionView() {
         <span className="expense">지출 -{totalExpense.toLocaleString()}원</span>
       </div>
 
-      {filteredBudgets.length > 0 ? (
+      {loading && filteredTransactions.length === 0 && (
+        <div className="empty-state">
+          <p>불러오는 중...</p>
+        </div>
+      )}
+
+      {!loading && filteredTransactions.length > 0 && (
         <div className="transaction-list">
-          {filteredBudgets.map((item) => (
+          {filteredTransactions.map((item) => (
             <div key={item.id} className="transaction-item">
               <div
                 className="item-icon"
@@ -170,12 +189,17 @@ export default function TransactionView() {
             </div>
           ))}
         </div>
-      ) : (
+      )}
+
+      {!loading && filteredTransactions.length === 0 && (
         <div className="empty-state">
           <p>📭</p>
           <p>이번 달 거래 내역이 없어요</p>
         </div>
       )}
+
+      {error && <p className="error">{error}</p>}
+      {deleteErrorMsg && <p className="error">{deleteErrorMsg}</p>}
 
       {editingTransaction && (
         <TransactionModal
@@ -189,7 +213,7 @@ export default function TransactionView() {
         <ConfirmModal
           title="삭제 확인"
           message="이 거래를 삭제하시겠습니까?"
-          onConfirm={() => setShowDeleteConfirm(null)}
+          onConfirm={handleDelete}
           onCancel={() => setShowDeleteConfirm(null)}
         />
       )}

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useCategoryStore } from '@/stores/categoryStore';
+import { useTransactionStore } from '@/stores/transactionStore';
 import BaseModal from '@/components/common/BaseModal';
 import './transaction-modal.css';
 
@@ -11,6 +12,12 @@ export default function TransactionModal({ transaction, onClose, onSubmit }) {
     getIncomeCategories,
     getExpenseCategories,
   } = useCategoryStore();
+
+  const {
+    createTransaction,
+    updateTransaction,
+    loading: transactionLoading,
+  } = useTransactionStore();
 
   const isEditMode = transaction !== null;
 
@@ -24,7 +31,6 @@ export default function TransactionModal({ transaction, onClose, onSubmit }) {
   });
 
   const [errorMsg, setErrorMsg] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (form.type === 'income') {
@@ -52,22 +58,23 @@ export default function TransactionModal({ transaction, onClose, onSubmit }) {
       return;
     }
 
-    setIsLoading(true);
+    const payload = {
+      ...form,
+      amount: parseInt(form.amount),
+      cid: parseInt(form.cid),
+    };
 
     try {
-      // TODO: 실제 API 호출 - POST 또는 PUT
-      console.log('거래 제출:', form);
+      if (isEditMode) {
+        await updateTransaction(transaction.id, payload);
+      } else {
+        await createTransaction(payload);
+      }
 
-      onSubmit?.({
-        ...form,
-        amount: parseInt(form.amount),
-        cid: parseInt(form.cid),
-      });
+      onSubmit?.();
     } catch (e) {
       setErrorMsg('거래 저장에 실패했습니다.');
       console.error('Failed to save transaction:', e);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -78,10 +85,10 @@ export default function TransactionModal({ transaction, onClose, onSubmit }) {
       </button>
       <button
         className="btn-submit"
-        disabled={isLoading}
+        disabled={transactionLoading}
         onClick={handleSubmit}
       >
-        {isLoading ? '처리 중...' : isEditMode ? '수정' : '등록'}
+        {transactionLoading ? '처리 중...' : isEditMode ? '수정' : '등록'}
       </button>
     </div>
   );
@@ -144,6 +151,7 @@ export default function TransactionModal({ transaction, onClose, onSubmit }) {
           <select
             value={form.cid}
             onChange={(e) => setForm({ ...form, cid: e.target.value })}
+            disabled={categoryLoading}
           >
             <option value="">카테고리를 선택해주세요</option>
             {categories.map((cat) => (
@@ -152,6 +160,7 @@ export default function TransactionModal({ transaction, onClose, onSubmit }) {
               </option>
             ))}
           </select>
+          {categoryError && <p className="error">{categoryError}</p>}
         </div>
 
         <div className="field">
