@@ -1,17 +1,34 @@
-import { useMemo } from 'react';
-import { useLegacyCategoryStore } from '@/stores/legacy/categoryStore';
+import { useEffect, useMemo } from 'react';
+import { useTransactionStore } from '@/stores/transactionStore';
 import './summary-cards.css';
 
 export default function SummaryCards() {
-  const { budgets, totalExpense } = useLegacyCategoryStore();
+  const { transactions, loading, error, getTransactions } =
+    useTransactionStore();
+
+  useEffect(() => {
+    getTransactions();
+  }, [getTransactions]);
 
   const currentMonth = new Date().toISOString().slice(0, 7);
 
+  // 이번 달 거래만 필터링
+  const monthlyTransactions = useMemo(() => {
+    const list = Array.isArray(transactions) ? transactions : [];
+    return list.filter((t) => t.date?.startsWith(currentMonth));
+  }, [transactions, currentMonth]);
+
+  const totalExpense = useMemo(() => {
+    return monthlyTransactions
+      .filter((t) => t.type === 'expense')
+      .reduce((sum, t) => sum + t.amount, 0);
+  }, [monthlyTransactions]);
+
   const totalIncome = useMemo(() => {
-    return budgets
-      .filter((b) => b.type === 'income' && b.date.startsWith(currentMonth))
-      .reduce((sum, b) => sum + b.amount, 0);
-  }, [budgets]);
+    return monthlyTransactions
+      .filter((t) => t.type === 'income')
+      .reduce((sum, t) => sum + t.amount, 0);
+  }, [monthlyTransactions]);
 
   const netIncome = totalIncome - totalExpense;
 
@@ -36,8 +53,17 @@ export default function SummaryCards() {
     },
   ];
 
+  if (loading && transactions.length === 0) {
+    return (
+      <div className="summary-cards">
+        <p>불러오는 중...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="summary-cards">
+      {error && <p className="error">{error}</p>}
       {cards.map((card) => (
         <div className="summary-card" key={card.label}>
           <div className="card-icon">{card.icon}</div>
