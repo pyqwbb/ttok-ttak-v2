@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
-import { useCategoryStore } from '@/stores/categoryStore';
+import { useLegacyCategoryStore } from '@/stores/legacy/categoryStore';
 import './summary-cards.css';
 
 export default function SummaryCards() {
-  const { budgets, totalExpense } = useCategoryStore();
+  const { budgets, totalExpense } = useLegacyCategoryStore();
 
   const currentMonth = new Date().toISOString().slice(0, 7);
 

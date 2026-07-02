@@ -1,6 +1,7 @@
 import React from 'react';
 import { RouterProvider } from 'react-router-dom';
 import { UserProvider } from './stores/userStore';
+import { LegacyCategoryProvider } from './stores/legacy/categoryStore';
 import { CategoryProvider } from './stores/categoryStore';
 import { CategoryBudgetProvider } from './stores/categoryBudgetStore';
 import { ReactionProvider } from './stores/reactionStore';
@@ -10,11 +11,13 @@ function App() {
   return (
     <UserProvider>
       <CategoryBudgetProvider>
-        <CategoryProvider>
-          <ReactionProvider>
-            <RouterProvider router={router} />
-          </ReactionProvider>
-        </CategoryProvider>
+        <LegacyCategoryProvider>
+          <CategoryProvider>
+            <ReactionProvider>
+              <RouterProvider router={router} />
+            </ReactionProvider>
+          </CategoryProvider>
+        </LegacyCategoryProvider>
       </CategoryBudgetProvider>
     </UserProvider>
   );

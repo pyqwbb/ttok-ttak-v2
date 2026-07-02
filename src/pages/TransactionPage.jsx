@@ -1,12 +1,12 @@
 import React, { useState, useMemo } from 'react';
-import { useCategoryStore } from '@/stores/categoryStore';
+import { useLegacyCategoryStore } from '@/stores/legacy/categoryStore';
 import TransactionModal from '@/components/transaction/TransactionModal';
 import ConfirmModal from '@/components/common/ConfirmModal';
 import MonthSelector from '@/components/common/MonthSelector';
 import './transaction-page.css';
 
 export default function TransactionView() {
-  const categoryStore = useCategoryStore();
+  const categoryStore = useLegacyCategoryStore();
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedType, setSelectedType] = useState('');
   const [selectedCid, setSelectedCid] = useState('');

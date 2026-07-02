@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
-import { useCategoryStore } from '@/stores/categoryStore';
+import { useLegacyCategoryStore } from '@/stores/legacy/categoryStore';
 import { useUserStore } from '@/stores/userStore';
 import { useReactionStore } from '@/stores/reactionStore';
 import BadgeGrid from '@/components/gamification/BadgeGrid';
@@ -21,7 +21,7 @@ const navItems = [
 export default function Layout() {
   const location = useLocation();
   const userStore = useUserStore();
-  const categoryStore = useCategoryStore();
+  const categoryStore = useLegacyCategoryStore();
   const reactionStore = useReactionStore();
 
   const [showTransactionModal, setShowTransactionModal] = useState(false);
