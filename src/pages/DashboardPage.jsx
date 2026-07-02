@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { useTransactionStore } from '@/stores/transactionStore';
 import { useCategoryStore } from '@/stores/categoryStore';
 import { useUserStore } from '@/stores/userStore';
-import { useReactionStore } from '@/stores/reactionStore';
+import { useGamificationStore } from '@/stores/gamificationStore';
 import MonthSelector from '@/components/common/MonthSelector';
 import SummaryCards from '@/components/dashboard/SummaryCards';
 import BubbleChart from '@/components/dashboard/BubbleChart';
@@ -23,7 +23,7 @@ export default function DashboardView() {
   } = useCategoryStore();
   const userStore = useUserStore();
   const { monthlySummaryMessages, fetchMonthlySummaryMessages } =
-    useReactionStore();
+    useGamificationStore();
 
   const [hasLoaded, setHasLoaded] = useState(false);
   const [currentDate, setCurrentDate] = useState(new Date());
