@@ -1,6 +1,6 @@
 import api from './index';
 
-export const budgetApi = {
+export const transactionApi = {
   // 전체 거래 내역 조회
   getAll() {
     return api.get('/api/budget');
