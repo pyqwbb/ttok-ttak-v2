@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
-import { useLegacyCategoryStore } from '@/stores/legacy/categoryStore';
 import { useUserStore } from '@/stores/userStore';
 import { useGamificationStore } from '@/stores/gamificationStore';
 import BadgeGrid from '@/components/gamification/BadgeGrid';
@@ -21,7 +20,6 @@ const navItems = [
 export default function Layout() {
   const location = useLocation();
   const userStore = useUserStore();
-  const categoryStore = useLegacyCategoryStore();
   const gamificationStore = useGamificationStore();
 
   const [showTransactionModal, setShowTransactionModal] = useState(false);
@@ -36,17 +34,6 @@ export default function Layout() {
   useEffect(() => {
     if (!hasInitialized) {
       const loadInitialData = async () => {
-        try {
-          if (
-            categoryStore.categories &&
-            categoryStore.categories.length === 0
-          ) {
-            await categoryStore.fetchAll(uid);
-          }
-        } catch (error) {
-          console.error('Failed to fetch category data:', error);
-        }
-
         try {
           if (!userStore.user) {
             await userStore.getUser();

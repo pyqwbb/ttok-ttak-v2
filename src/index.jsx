@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { RouterProvider } from 'react-router-dom';
 import { UserProvider } from './stores/userStore';
-import { LegacyCategoryProvider } from './stores/legacy/categoryStore';
 import { CategoryProvider } from './stores/categoryStore';
 import { TransactionProvider } from './stores/transactionStore';
 import { CategoryBudgetProvider } from './stores/categoryBudgetStore';
@@ -15,13 +14,11 @@ ReactDOM.createRoot(document.getElementById('app')).render(
     <UserProvider>
       <CategoryBudgetProvider>
         <GamificationProvider>
-          <LegacyCategoryProvider>
-            <TransactionProvider>
-              <CategoryProvider>
-                <RouterProvider router={router} />
-              </CategoryProvider>
-            </TransactionProvider>
-          </LegacyCategoryProvider>
+          <TransactionProvider>
+            <CategoryProvider>
+              <RouterProvider router={router} />
+            </CategoryProvider>
+          </TransactionProvider>
         </GamificationProvider>
       </CategoryBudgetProvider>
     </UserProvider>

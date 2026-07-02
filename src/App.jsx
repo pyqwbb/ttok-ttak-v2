@@ -1,7 +1,6 @@
 import React from 'react';
 import { RouterProvider } from 'react-router-dom';
 import { UserProvider } from './stores/userStore';
-import { LegacyCategoryProvider } from './stores/legacy/categoryStore';
 import { CategoryProvider } from './stores/categoryStore';
 import { TransactionProvider } from './stores/transactionStore';
 import { CategoryBudgetProvider } from './stores/categoryBudgetStore';
@@ -13,13 +12,11 @@ function App() {
     <UserProvider>
       <CategoryBudgetProvider>
         <GamificationProvider>
-          <LegacyCategoryProvider>
             <TransactionProvider>
               <CategoryProvider>
                 <RouterProvider router={router} />
               </CategoryProvider>
             </TransactionProvider>
-          </LegacyCategoryProvider>
         </GamificationProvider>
       </CategoryBudgetProvider>
     </UserProvider>
