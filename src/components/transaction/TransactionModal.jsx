@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useCategoryStore } from '@/stores/categoryStore';
 import { useTransactionStore } from '@/stores/transactionStore';
 import BaseModal from '@/components/common/BaseModal';
@@ -9,8 +9,7 @@ export default function TransactionModal({ transaction, onClose, onSubmit }) {
     categories,
     loading: categoryLoading,
     error: categoryError,
-    getIncomeCategories,
-    getExpenseCategories,
+    getCategories,
   } = useCategoryStore();
 
   const {
@@ -32,13 +31,18 @@ export default function TransactionModal({ transaction, onClose, onSubmit }) {
 
   const [errorMsg, setErrorMsg] = useState('');
 
+  // 전체 카테고리가 비어있을 때만 한 번 로드
   useEffect(() => {
-    if (form.type === 'income') {
-      getIncomeCategories();
-    } else {
-      getExpenseCategories();
+    if (categories.length === 0) {
+      getCategories();
     }
-  }, [form.type, getIncomeCategories, getExpenseCategories]);
+  }, [categories.length, getCategories]);
+
+  // form.type에 맞게 로컬에서만 필터링 (전역 상태는 건드리지 않음)
+  const filteredCategories = useMemo(
+    () => categories.filter((cat) => cat.type === form.type),
+    [categories, form.type],
+  );
 
   const handleTypeChange = (type) => {
     setForm({ ...form, type, cid: '' });
@@ -154,7 +158,7 @@ export default function TransactionModal({ transaction, onClose, onSubmit }) {
             disabled={categoryLoading}
           >
             <option value="">카테고리를 선택해주세요</option>
-            {categories.map((cat) => (
+            {filteredCategories.map((cat) => (
               <option key={cat.id} value={cat.id}>
                 {cat.img} {cat.name}
               </option>

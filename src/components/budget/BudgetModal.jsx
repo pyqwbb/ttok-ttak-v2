@@ -1,17 +1,16 @@
 import { useState } from 'react';
 import { useUserStore } from '@/stores/userStore';
-import { useCategoryStore } from '@/stores/categoryStore';
 import { useCategoryBudgetStore } from '@/stores/categoryBudgetStore';
 import BaseModal from '@/components/common/BaseModal';
 
 export default function BudgetModal({
   budget,
+  categories,
   setBudgetCids,
   onClose,
   onSubmit,
 }) {
   const userStore = useUserStore();
-  const { categories } = useCategoryStore();
   const { createCategoryBudget, updateCategoryBudget } =
     useCategoryBudgetStore();
 

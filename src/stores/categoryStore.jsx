@@ -28,51 +28,9 @@ export const CategoryProvider = ({ children }) => {
     }
   }, []);
 
-  // 수입 카테고리 조회
-  const getIncomeCategories = useCallback(async () => {
-    setLoading(true);
-    try {
-      const response = await categoryApi.getIncome();
-      setCategories(response.data);
-      setError(null);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  // 지출 카테고리 조회
-  const getExpenseCategories = useCallback(async () => {
-    setLoading(true);
-    try {
-      const response = await categoryApi.getExpense();
-      setCategories(response.data);
-      setError(null);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
   const value = useMemo(
-    () => ({
-      categories,
-      loading,
-      error,
-      getCategories,
-      getIncomeCategories,
-      getExpenseCategories,
-    }),
-    [
-      categories,
-      loading,
-      error,
-      getCategories,
-      getIncomeCategories,
-      getExpenseCategories,
-    ],
+    () => ({ categories, loading, error, getCategories }),
+    [categories, loading, error, getCategories],
   );
 
   return (
@@ -85,9 +43,7 @@ export const CategoryProvider = ({ children }) => {
 export const useCategoryStore = () => {
   const context = useContext(CategoryContext);
   if (!context) {
-    throw new Error(
-      'useCategoryStoreV2 must be used within CategoryProviderV2',
-    );
+    throw new Error('useCategoryStore must be used within CategoryProvider');
   }
   return context;
 };
