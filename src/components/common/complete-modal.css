@@ -10,6 +10,8 @@
   justify-content: center;
   align-items: center;
   z-index: 1001;
+
+  animation: fadeIn 0.2s ease;
 }
 
 .complete-modal-content {
@@ -20,12 +22,32 @@
   max-width: 400px;
   width: 90%;
   text-align: center;
+
+  animation: popIn 0.25s ease;
 }
 
+/* 아이콘 */
 .complete-icon {
   font-size: 48px;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   animation: checkMark 0.6s ease;
+}
+
+/* 타이틀 */
+.complete-title {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #2c3333;
+}
+
+/* 메시지 (더 작고 얇게) */
+.complete-message {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 400;
+  color: #6b7272;
+  line-height: 1.4;
 }
 
 @keyframes checkMark {
@@ -37,9 +59,22 @@
   }
 }
 
-.complete-message {
-  margin: 0;
-  font-size: 18px;
-  font-weight: 600;
-  color: #2c3333;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes popIn {
+  from {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }

@@ -2,17 +2,23 @@ import React from 'react';
 import { RouterProvider } from 'react-router-dom';
 import { UserProvider } from './stores/userStore';
 import { CategoryProvider } from './stores/categoryStore';
-import { ReactionProvider } from './stores/reactionStore';
+import { TransactionProvider } from './stores/transactionStore';
+import { CategoryBudgetProvider } from './stores/categoryBudgetStore';
+import { GamificationProvider } from './stores/gamificationStore';
 import router from './router';
 
 function App() {
   return (
     <UserProvider>
-      <CategoryProvider>
-        <ReactionProvider>
-          <RouterProvider router={router} />
-        </ReactionProvider>
-      </CategoryProvider>
+      <CategoryBudgetProvider>
+        <GamificationProvider>
+            <TransactionProvider>
+              <CategoryProvider>
+                <RouterProvider router={router} />
+              </CategoryProvider>
+            </TransactionProvider>
+        </GamificationProvider>
+      </CategoryBudgetProvider>
     </UserProvider>
   );
 }

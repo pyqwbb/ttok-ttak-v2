@@ -1,17 +1,20 @@
 import { useMemo } from 'react';
-import { useCategoryStore } from '@/stores/categoryStore';
 import './summary-cards.css';
 
-export default function SummaryCards() {
-  const { budgets, totalExpense } = useCategoryStore();
-
-  const currentMonth = new Date().toISOString().slice(0, 7);
+export default function SummaryCards({ transactions }) {
+  const totalExpense = useMemo(() => {
+    const list = Array.isArray(transactions) ? transactions : [];
+    return list
+      .filter((t) => t.type === 'expense')
+      .reduce((sum, t) => sum + t.amount, 0);
+  }, [transactions]);
 
   const totalIncome = useMemo(() => {
-    return budgets
-      .filter((b) => b.type === 'income' && b.date.startsWith(currentMonth))
-      .reduce((sum, b) => sum + b.amount, 0);
-  }, [budgets]);
+    const list = Array.isArray(transactions) ? transactions : [];
+    return list
+      .filter((t) => t.type === 'income')
+      .reduce((sum, t) => sum + t.amount, 0);
+  }, [transactions]);
 
   const netIncome = totalIncome - totalExpense;
 
